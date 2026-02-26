@@ -52,6 +52,15 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 		links: [
+			{
+				rel: "preload",
+				href: appCss,
+				as: "style",
+			},
+			{
+				rel: "stylesheet",
+				href: appCss,
+			},
 			{ rel: "preconnect", href: "https://fonts.googleapis.com" },
 			{
 				rel: "preconnect",
@@ -61,10 +70,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			{
 				rel: "stylesheet",
 				href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap",
-			},
-			{
-				rel: "stylesheet",
-				href: appCss,
 			},
 			{ rel: "manifest", href: "/manifest.json" },
 			{ rel: "icon", href: "/favicon.ico" },
@@ -83,6 +88,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		<html lang="id">
 			<head>
 				<HeadContent />
+				<style
+					dangerouslySetInnerHTML={{
+						__html: `html{visibility:hidden}`,
+					}}
+				/>
+				<script
+					dangerouslySetInnerHTML={{
+						__html: `document.addEventListener('DOMContentLoaded',function(){document.documentElement.style.visibility='visible'})`,
+					}}
+				/>
 			</head>
 			<body>
 				<TanStackQueryProvider>{children}</TanStackQueryProvider>
