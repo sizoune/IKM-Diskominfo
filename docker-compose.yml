@@ -1,0 +1,15 @@
+services:
+  app:
+    container_name: ikm-diskominfo-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    env_file:
+      - .env.local
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=3000
+    restart: unless-stopped

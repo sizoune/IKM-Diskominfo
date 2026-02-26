@@ -1,0 +1,14 @@
+node_modules
+.output
+.git
+.gitignore
+.env*
+!.env.example
+Dockerfile
+docker-compose.yml
+*.md
+.vscode
+.idea
+.omc
+.claude
+drizzle
