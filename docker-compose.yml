@@ -7,7 +7,7 @@ services:
     expose:
       - "3000"
     env_file:
-      - .env.local
+      - .env
     environment:
       - NODE_ENV=production
       - HOST=0.0.0.0
