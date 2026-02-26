@@ -1,0 +1,28 @@
+{
+  "projectName": "ikm-new",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "pnpm",
+  "includeExamples": false,
+  "tailwind": true,
+  "addOnOptions": {
+    "drizzle": {
+      "database": "mysql"
+    }
+  },
+  "envVarValues": {},
+  "git": true,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "biome",
+    "nitro",
+    "drizzle",
+    "form",
+    "shadcn",
+    "table",
+    "better-auth",
+    "tanstack-query"
+  ]
+}

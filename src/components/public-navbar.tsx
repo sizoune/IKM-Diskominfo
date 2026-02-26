@@ -1,0 +1,117 @@
+import { Link } from "@tanstack/react-router";
+import { Building2, LogIn, Menu } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+	Sheet,
+	SheetClose,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from "@/components/ui/sheet";
+
+export function PublicNavbar() {
+	const [open, setOpen] = useState(false);
+
+	return (
+		<header className="sticky top-0 z-50 backdrop-blur-lg bg-white/80 border-b border-white/20 shadow-sm">
+			<div className="container mx-auto flex h-16 items-center justify-between px-4">
+				<Link to="/" className="flex items-center gap-2.5">
+					<Building2 className="size-6 text-indigo-600" />
+					<div className="flex items-baseline gap-1.5">
+						<span className="text-lg font-bold leading-tight text-foreground">
+							IKM
+						</span>
+						<span className="text-sm text-muted-foreground leading-tight">
+							Diskominfo
+						</span>
+					</div>
+				</Link>
+
+				{/* Desktop nav */}
+				<nav className="hidden items-center gap-6 md:flex">
+					<Link
+						to="/guest/survey"
+						className="min-h-[44px] flex items-center text-sm text-gray-700 transition-colors duration-200 hover:text-indigo-600"
+						activeProps={{ className: "text-indigo-600 font-medium" }}
+					>
+						Survey
+					</Link>
+					<Link
+						to="/guest/ikm"
+						className="min-h-[44px] flex items-center text-sm text-gray-700 transition-colors duration-200 hover:text-indigo-600"
+						activeProps={{ className: "text-indigo-600 font-medium" }}
+					>
+						Hasil IKM
+					</Link>
+					<Button
+						asChild
+						size="sm"
+						className="min-h-[44px] bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700"
+					>
+						<Link to="/login">
+							<LogIn className="mr-2 size-4" />
+							Login
+						</Link>
+					</Button>
+				</nav>
+
+				{/* Mobile hamburger */}
+				<Sheet open={open} onOpenChange={setOpen}>
+					<SheetTrigger asChild>
+						<Button
+							variant="ghost"
+							size="icon"
+							className="min-h-[44px] min-w-[44px] text-foreground hover:bg-indigo-50 md:hidden"
+						>
+							<Menu className="size-5" />
+							<span className="sr-only">Menu</span>
+						</Button>
+					</SheetTrigger>
+					<SheetContent
+						side="right"
+						className="w-72 backdrop-blur-xl bg-white/90 border-white/20"
+					>
+						<SheetHeader>
+							<SheetTitle className="flex items-center gap-2 text-foreground">
+								<Building2 className="size-5 text-indigo-600" />
+								IKM Diskominfo
+							</SheetTitle>
+						</SheetHeader>
+						<nav className="flex flex-col gap-1 px-4">
+							<SheetClose asChild>
+								<Link
+									to="/guest/survey"
+									className="min-h-[44px] flex items-center rounded-md px-3 text-sm text-gray-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+									onClick={() => setOpen(false)}
+								>
+									Survey
+								</Link>
+							</SheetClose>
+							<SheetClose asChild>
+								<Link
+									to="/guest/ikm"
+									className="min-h-[44px] flex items-center rounded-md px-3 text-sm text-gray-700 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+									onClick={() => setOpen(false)}
+								>
+									Hasil IKM
+								</Link>
+							</SheetClose>
+							<SheetClose asChild>
+								<Link
+									to="/login"
+									className="mt-2 min-h-[44px] flex items-center justify-center gap-2 rounded-md bg-gradient-to-r from-indigo-600 to-violet-600 px-3 text-sm font-medium text-white transition-colors hover:from-indigo-700 hover:to-violet-700"
+									onClick={() => setOpen(false)}
+								>
+									<LogIn className="size-4" />
+									Login
+								</Link>
+							</SheetClose>
+						</nav>
+					</SheetContent>
+				</Sheet>
+			</div>
+		</header>
+	);
+}
