@@ -28,14 +28,15 @@ RUN addgroup --system --gid 1001 nodejs && \
 # App build output
 COPY --from=builder --chown=app:nodejs /app/.output ./.output
 
-# Migration files needed by drizzle-kit migrate
+# Migration and script files
 COPY --from=builder --chown=app:nodejs /app/drizzle ./drizzle
 COPY --from=builder --chown=app:nodejs /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder --chown=app:nodejs /app/scripts ./scripts
 COPY --from=builder --chown=app:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=app:nodejs /app/pnpm-lock.yaml ./pnpm-lock.yaml
 
-# Install only drizzle-kit + mysql2 for migrations (minimal)
-RUN pnpm add drizzle-kit drizzle-orm mysql2 dotenv && pnpm store prune
+# Install deps for migrations and scripts
+RUN pnpm add drizzle-kit drizzle-orm mysql2 dotenv better-auth tsx && pnpm store prune
 
 USER app
 
