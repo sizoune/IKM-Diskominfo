@@ -88,7 +88,7 @@ function AdminLayout() {
 						<div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 p-1 ring-1 ring-white/20">
 							<img
 								src="/komdigi.png"
-								alt="Logo Komdigi"
+								alt="Logo Diskominfo Tabalong"
 								className="size-7 object-contain"
 							/>
 						</div>

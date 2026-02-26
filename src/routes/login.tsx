@@ -72,7 +72,7 @@ function LoginPage() {
 					<div className="rounded-2xl bg-white/15 backdrop-blur-sm p-5 ring-1 ring-white/20 shadow-2xl">
 						<img
 							src="/komdigi.png"
-							alt="Logo Komdigi"
+							alt="Logo Diskominfo Tabalong"
 							className="size-20 object-contain"
 						/>
 					</div>
@@ -81,7 +81,9 @@ function LoginPage() {
 							IKM Diskominfo
 						</h1>
 						<p className="mt-1 text-sm font-medium text-indigo-200">
-							Kementerian Komunikasi dan Digital
+							Dinas Komunikasi dan Informatika
+							<br />
+							Kabupaten Tabalong
 						</p>
 						<p className="mt-3 max-w-xs text-center text-sm text-indigo-300 leading-relaxed">
 							Indeks Kepuasan Masyarakat — Dinas Komunikasi dan Informatika
@@ -99,7 +101,7 @@ function LoginPage() {
 								<div className="rounded-xl bg-indigo-50 p-3">
 									<img
 										src="/komdigi.png"
-										alt="Logo Komdigi"
+										alt="Logo Diskominfo Tabalong"
 										className="size-10 object-contain"
 									/>
 								</div>

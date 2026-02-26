@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
 			{
 				name: "description",
 				content:
-					"Sistem survei Indeks Kepuasan Masyarakat (IKM) terhadap pelayanan publik Dinas Komunikasi dan Informatika, Kementerian Komunikasi dan Digital.",
+					"Sistem survei Indeks Kepuasan Masyarakat (IKM) terhadap pelayanan publik Dinas Komunikasi dan Informatika Kabupaten Tabalong.",
 			},
 			{
 				property: "og:title",
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
 			{
 				property: "og:description",
 				content:
-					"Sistem survei Indeks Kepuasan Masyarakat (IKM) terhadap pelayanan publik Dinas Komunikasi dan Informatika, Kementerian Komunikasi dan Digital.",
+					"Sistem survei Indeks Kepuasan Masyarakat (IKM) terhadap pelayanan publik Dinas Komunikasi dan Informatika Kabupaten Tabalong.",
 			},
 			{ property: "og:url", content: "https://ikm.kominfo.go.id/" },
 		],
@@ -52,14 +52,14 @@ function LandingPage() {
 						<div className="rounded-2xl bg-white/15 backdrop-blur-sm p-4 ring-1 ring-white/20 shadow-2xl">
 							<img
 								src="/komdigi.png"
-								alt="Logo Komdigi"
+								alt="Logo Diskominfo Tabalong"
 								className="h-16 w-auto object-contain"
 							/>
 						</div>
 					</div>
 					<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-xs font-medium text-indigo-100 ring-1 ring-white/20">
 						<Star className="size-3.5 fill-indigo-200 text-indigo-200" />
-						Kementerian Komunikasi dan Digital
+						Dinas Komunikasi dan Informatika Kabupaten Tabalong
 					</div>
 					<h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
 						Indeks Kepuasan
@@ -172,15 +172,17 @@ function LandingPage() {
 								<div className="mb-4 flex justify-center">
 									<img
 										src="/komdigi.png"
-										alt="Logo Komdigi"
+										alt="Logo Diskominfo Tabalong"
 										className="h-14 w-auto object-contain opacity-90"
 									/>
 								</div>
 								<h3 className="text-center text-lg font-bold">
-									Kementerian Komunikasi dan Digital
+									Dinas Komunikasi dan Informatika
+									<br />
+									Kabupaten Tabalong
 								</h3>
 								<p className="mt-2 text-center text-sm text-indigo-200">
-									Dinas Komunikasi dan Informatika
+									Sistem Survei Kepuasan Masyarakat
 								</p>
 								<div className="mt-6 grid grid-cols-2 gap-4">
 									<div className="rounded-xl bg-white/15 p-4 text-center backdrop-blur-sm">

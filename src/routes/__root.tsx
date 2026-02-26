@@ -28,7 +28,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			{
 				name: "description",
 				content:
-					"Indeks Kepuasan Masyarakat (IKM) — Sistem survei kepuasan masyarakat terhadap pelayanan publik Dinas Komunikasi dan Informatika, Kementerian Komunikasi dan Digital.",
+					"Indeks Kepuasan Masyarakat (IKM) — Sistem survei kepuasan masyarakat terhadap pelayanan publik Dinas Komunikasi dan Informatika Kabupaten Tabalong.",
 			},
 			{
 				property: "og:type",

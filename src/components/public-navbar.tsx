@@ -20,7 +20,7 @@ export function PublicNavbar() {
 				<Link to="/" className="flex items-center gap-3">
 					<img
 						src="/komdigi.png"
-						alt="Logo Komdigi"
+						alt="Logo Diskominfo Tabalong"
 						className="size-8 object-contain"
 					/>
 					<div className="flex items-baseline gap-1.5">
@@ -81,7 +81,7 @@ export function PublicNavbar() {
 							<SheetTitle className="flex items-center gap-2.5 text-foreground">
 								<img
 									src="/komdigi.png"
-									alt="Logo Komdigi"
+									alt="Logo Diskominfo Tabalong"
 									className="size-6 object-contain"
 								/>
 								<span className="font-bold text-indigo-900">IKM</span>

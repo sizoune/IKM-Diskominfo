@@ -10,7 +10,7 @@ export function PublicFooter() {
 						<div className="flex items-center gap-3">
 							<img
 								src="/komdigi.png"
-								alt="Logo Komdigi"
+								alt="Logo Diskominfo Tabalong"
 								className="size-10 object-contain"
 							/>
 							<div>
@@ -18,7 +18,7 @@ export function PublicFooter() {
 									IKM Diskominfo
 								</p>
 								<p className="text-xs text-indigo-300 leading-tight">
-									Kementerian Komunikasi dan Digital
+									Dinas Komunikasi dan Informatika Kabupaten Tabalong
 								</p>
 							</div>
 						</div>
@@ -68,8 +68,8 @@ export function PublicFooter() {
 				</div>
 
 				<div className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-slate-500">
-					&copy; {new Date().getFullYear()} Kementerian Komunikasi dan Digital —
-					Dinas Komunikasi dan Informatika. Hak cipta dilindungi.
+					&copy; {new Date().getFullYear()} Dinas Komunikasi dan Informatika
+					Kabupaten Tabalong — Hak cipta dilindungi.
 				</div>
 			</div>
 		</footer>
