@@ -88,16 +88,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		<html lang="id">
 			<head>
 				<HeadContent />
-				<style
-					dangerouslySetInnerHTML={{
-						__html: `html{visibility:hidden}`,
-					}}
-				/>
-				<script
-					dangerouslySetInnerHTML={{
-						__html: `document.addEventListener('DOMContentLoaded',function(){document.documentElement.style.visibility='visible'})`,
-					}}
-				/>
 			</head>
 			<body>
 				<TanStackQueryProvider>{children}</TanStackQueryProvider>
