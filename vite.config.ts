@@ -11,7 +11,17 @@ import { nitro } from 'nitro/vite'
 const config = defineConfig({
   plugins: [
     devtools(),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
+    nitro({
+      rollupConfig: { external: [/^@sentry\//] },
+      compressPublicAssets: true,
+      routeRules: {
+        '/assets/**': {
+          headers: {
+            'cache-control': 'public, max-age=31536000, immutable',
+          },
+        },
+      },
+    }),
     tsconfigPaths({ projects: ['./tsconfig.json'] }),
     tailwindcss(),
     tanstackStart(),
