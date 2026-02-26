@@ -3,7 +3,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { List, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { DataTable } from "@/components/data-table";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +26,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { createForm, deleteForm, getForms, updateForm } from "@/server/forms";
 
 export const Route = createFileRoute("/admin/forms/")({
@@ -42,12 +60,17 @@ function FormsPage() {
 	const [desc, setDesc] = useState("");
 	const [order, setOrder] = useState(0);
 	const [active, setActive] = useState(1);
+	const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
 	const createMutation = useMutation({
 		mutationFn: createForm,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["forms"] });
 			resetDialog();
+			toast.success("Form berhasil ditambahkan");
+		},
+		onError: () => {
+			toast.error("Gagal menambahkan form");
 		},
 	});
 
@@ -56,6 +79,10 @@ function FormsPage() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["forms"] });
 			resetDialog();
+			toast.success("Form berhasil diperbarui");
+		},
+		onError: () => {
+			toast.error("Gagal memperbarui form");
 		},
 	});
 
@@ -63,6 +90,10 @@ function FormsPage() {
 		mutationFn: deleteForm,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["forms"] });
+			toast.success("Form berhasil dihapus");
+		},
+		onError: () => {
+			toast.error("Gagal menghapus form");
 		},
 	});
 
@@ -96,10 +127,19 @@ function FormsPage() {
 	}
 
 	const columns: ColumnDef<FormRow>[] = [
-		{ accessorKey: "formId", header: "ID" },
-		{ accessorKey: "name", header: "Nama" },
-		{ accessorKey: "desc", header: "Deskripsi" },
-		{ accessorKey: "order", header: "Urutan" },
+		{ accessorKey: "formId", header: "ID", size: 60 },
+		{ accessorKey: "name", header: "Nama", size: 150 },
+		{
+			accessorKey: "desc",
+			header: "Deskripsi",
+			size: 300,
+			cell: ({ row }) => (
+				<span className="line-clamp-2 break-words">
+					{row.original.desc}
+				</span>
+			),
+		},
+		{ accessorKey: "order", header: "Urutan", size: 70 },
 		{
 			accessorKey: "active",
 			header: "Status",
@@ -134,13 +174,9 @@ function FormsPage() {
 					<Button
 						variant="ghost"
 						size="icon"
-						onClick={() =>
-							deleteMutation.mutate({
-								data: row.original.formId,
-							})
-						}
+						onClick={() => setDeleteTarget(row.original.formId)}
 					>
-						<Trash2 className="size-4" />
+						<Trash2 className="size-4 text-destructive" />
 					</Button>
 				</div>
 			),
@@ -175,25 +211,31 @@ function FormsPage() {
 								<Label>Deskripsi</Label>
 								<Input value={desc} onChange={(e) => setDesc(e.target.value)} />
 							</div>
-							<div className="grid grid-cols-2 gap-4">
-								<div className="space-y-2">
-									<Label>Urutan</Label>
-									<Input
-										type="number"
-										value={order}
-										onChange={(e) => setOrder(Number(e.target.value))}
-									/>
-								</div>
+							<div className={editing ? "grid grid-cols-2 gap-4" : ""}>
+								{editing && (
+									<div className="space-y-2">
+										<Label>Urutan</Label>
+										<Input
+											type="number"
+											value={order}
+											onChange={(e) => setOrder(Number(e.target.value))}
+										/>
+									</div>
+								)}
 								<div className="space-y-2">
 									<Label>Aktif</Label>
-									<select
-										className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
-										value={active}
-										onChange={(e) => setActive(Number(e.target.value))}
+									<Select
+										value={String(active)}
+										onValueChange={(v) => setActive(Number(v))}
 									>
-										<option value={1}>Aktif</option>
-										<option value={0}>Nonaktif</option>
-									</select>
+										<SelectTrigger>
+											<SelectValue />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="1">Aktif</SelectItem>
+											<SelectItem value="0">Nonaktif</SelectItem>
+										</SelectContent>
+									</Select>
 								</div>
 							</div>
 							<Button
@@ -213,6 +255,34 @@ function FormsPage() {
 				searchKey="name"
 				searchPlaceholder="Cari form..."
 			/>
+			<AlertDialog
+				open={deleteTarget !== null}
+				onOpenChange={(open) => !open && setDeleteTarget(null)}
+			>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>Hapus Form?</AlertDialogTitle>
+						<AlertDialogDescription>
+							Form yang dihapus tidak dapat dikembalikan. Semua pertanyaan dan
+							pilihan terkait juga akan dihapus.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel>Batal</AlertDialogCancel>
+						<AlertDialogAction
+							className="bg-destructive text-white hover:bg-destructive/90"
+							onClick={() => {
+								if (deleteTarget !== null) {
+									deleteMutation.mutate({ data: deleteTarget });
+									setDeleteTarget(null);
+								}
+							}}
+						>
+							Hapus
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
 		</div>
 	);
 }

@@ -13,6 +13,12 @@ import { authClient } from "@/lib/auth-client";
 import { getSession } from "@/lib/auth-guard";
 
 export const Route = createFileRoute("/login")({
+	head: () => ({
+		meta: [
+			{ title: "Masuk — IKM Diskominfo" },
+			{ name: "robots", content: "noindex, nofollow" },
+		],
+	}),
 	component: LoginPage,
 	beforeLoad: async () => {
 		const session = await getSession();

@@ -28,11 +28,11 @@ function SurveyListPage() {
 	});
 
 	const columns: ColumnDef<SurveyRow>[] = [
-		{ accessorKey: "surveyId", header: "ID" },
-		{ accessorKey: "date", header: "Tanggal" },
-		{ accessorKey: "tamuNama", header: "Tamu" },
-		{ accessorKey: "formName", header: "Form" },
-		{ accessorKey: "layananNama", header: "Layanan" },
+		{ accessorKey: "surveyId", header: "ID", size: 50 },
+		{ accessorKey: "date", header: "Tanggal", size: 100 },
+		{ accessorKey: "tamuNama", header: "Tamu", size: 150 },
+		{ accessorKey: "formName", header: "Form", size: 120 },
+		{ accessorKey: "layananNama", header: "Layanan", size: 120 },
 		{
 			accessorKey: "total",
 			header: "Total",

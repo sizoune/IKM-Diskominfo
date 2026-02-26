@@ -25,6 +25,26 @@ import { getMutu } from "@/lib/ikm";
 import { getAvailableYears, getIkmData } from "@/server/ikm";
 
 export const Route = createFileRoute("/guest/ikm")({
+	head: () => ({
+		meta: [
+			{ title: "Hasil IKM — Indeks Kepuasan Masyarakat | Diskominfo" },
+			{
+				name: "description",
+				content:
+					"Lihat hasil Indeks Kepuasan Masyarakat (IKM) — data penilaian masyarakat terhadap kualitas pelayanan publik Dinas Komunikasi dan Informatika.",
+			},
+			{
+				property: "og:title",
+				content: "Hasil IKM — Indeks Kepuasan Masyarakat | Diskominfo",
+			},
+			{
+				property: "og:description",
+				content:
+					"Lihat hasil Indeks Kepuasan Masyarakat (IKM) — data penilaian masyarakat terhadap kualitas pelayanan publik Dinas Komunikasi dan Informatika.",
+			},
+			{ property: "og:url", content: "https://ikm.kominfo.go.id/guest/ikm" },
+		],
+	}),
 	component: IkmPage,
 });
 

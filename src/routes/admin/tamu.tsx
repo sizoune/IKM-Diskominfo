@@ -115,19 +115,27 @@ function TamuPage() {
 	}
 
 	const columns: ColumnDef<TamuRow>[] = [
-		{ accessorKey: "tamuId", header: "ID" },
-		{ accessorKey: "nama", header: "Nama" },
-		{ accessorKey: "nip", header: "NIP" },
+		{ accessorKey: "tamuId", header: "ID", size: 40 },
+		{ accessorKey: "nama", header: "Nama", size: 140 },
+		{
+			accessorKey: "nip",
+			header: "NIP",
+			size: 160,
+			cell: ({ row }) => (
+				<span className="break-all">{row.original.nip}</span>
+			),
+		},
 		{
 			accessorKey: "jk",
 			header: "JK",
+			size: 90,
 			cell: ({ row }) =>
 				JK[row.original.jk as keyof typeof JK] ?? row.original.jk,
 		},
-		{ accessorKey: "umur", header: "Umur" },
-		{ accessorKey: "pendidikan", header: "Pendidikan" },
-		{ accessorKey: "pekerjaan", header: "Pekerjaan" },
-		{ accessorKey: "status", header: "Status" },
+		{ accessorKey: "umur", header: "Umur", size: 50 },
+		{ accessorKey: "pendidikan", header: "Pendidikan", size: 80 },
+		{ accessorKey: "pekerjaan", header: "Pekerjaan", size: 80 },
+		{ accessorKey: "status", header: "Status", size: 100 },
 		{
 			id: "actions",
 			header: "Aksi",

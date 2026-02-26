@@ -11,7 +11,29 @@ import { PublicFooter } from "@/components/public-footer";
 import { PublicNavbar } from "@/components/public-navbar";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/")({ component: LandingPage });
+export const Route = createFileRoute("/")({
+	head: () => ({
+		meta: [
+			{ title: "IKM — Indeks Kepuasan Masyarakat | Diskominfo" },
+			{
+				name: "description",
+				content:
+					"Sistem survei Indeks Kepuasan Masyarakat (IKM) terhadap pelayanan publik Dinas Komunikasi dan Informatika, Kementerian Komunikasi dan Digital.",
+			},
+			{
+				property: "og:title",
+				content: "IKM — Indeks Kepuasan Masyarakat | Diskominfo",
+			},
+			{
+				property: "og:description",
+				content:
+					"Sistem survei Indeks Kepuasan Masyarakat (IKM) terhadap pelayanan publik Dinas Komunikasi dan Informatika, Kementerian Komunikasi dan Digital.",
+			},
+			{ property: "og:url", content: "https://ikm.kominfo.go.id/" },
+		],
+	}),
+	component: LandingPage,
+});
 
 function LandingPage() {
 	return (

@@ -30,6 +30,29 @@ import { getQuestionsByFormId } from "@/server/questions";
 import { submitSurvey } from "@/server/survey-submit";
 
 export const Route = createFileRoute("/guest/survey/")({
+	head: () => ({
+		meta: [
+			{ title: "Isi Survey Kepuasan — IKM Diskominfo" },
+			{
+				name: "description",
+				content:
+					"Sampaikan penilaian Anda terhadap kualitas pelayanan publik melalui survey Indeks Kepuasan Masyarakat (IKM) Dinas Komunikasi dan Informatika.",
+			},
+			{
+				property: "og:title",
+				content: "Isi Survey Kepuasan — IKM Diskominfo",
+			},
+			{
+				property: "og:description",
+				content:
+					"Sampaikan penilaian Anda terhadap kualitas pelayanan publik melalui survey Indeks Kepuasan Masyarakat (IKM) Dinas Komunikasi dan Informatika.",
+			},
+			{
+				property: "og:url",
+				content: "https://ikm.kominfo.go.id/guest/survey",
+			},
+		],
+	}),
 	component: SurveyPage,
 });
 

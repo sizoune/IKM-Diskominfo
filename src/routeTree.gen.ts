@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,8 +30,14 @@ import { Route as AdminUsersUserIdRouteImport } from './routes/admin/users/$user
 import { Route as AdminSurveySurveyIdRouteImport } from './routes/admin/survey/$surveyId'
 import { Route as AdminReportsBukuTamuRouteImport } from './routes/admin/reports/buku-tamu'
 import { Route as AdminFormsFormIdQuestionsRouteImport } from './routes/admin/forms/$formId.questions'
+import { Route as AdminFormsFormIdQuestionsIndexRouteImport } from './routes/admin/forms/$formId.questions.index'
 import { Route as AdminFormsFormIdQuestionsQuestionIdChoicesRouteImport } from './routes/admin/forms/$formId.questions.$questionId.choices'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -132,6 +139,12 @@ const AdminFormsFormIdQuestionsRoute =
     path: '/forms/$formId/questions',
     getParentRoute: () => AdminRouteRoute,
   } as any)
+const AdminFormsFormIdQuestionsIndexRoute =
+  AdminFormsFormIdQuestionsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AdminFormsFormIdQuestionsRoute,
+  } as any)
 const AdminFormsFormIdQuestionsQuestionIdChoicesRoute =
   AdminFormsFormIdQuestionsQuestionIdChoicesRouteImport.update({
     id: '/$questionId/choices',
@@ -143,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/layanan': typeof AdminLayananRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -160,11 +174,13 @@ export interface FileRoutesByFullPath {
   '/admin/users/': typeof AdminUsersIndexRoute
   '/guest/survey/': typeof GuestSurveyIndexRoute
   '/admin/forms/$formId/questions': typeof AdminFormsFormIdQuestionsRouteWithChildren
+  '/admin/forms/$formId/questions/': typeof AdminFormsFormIdQuestionsIndexRoute
   '/admin/forms/$formId/questions/$questionId/choices': typeof AdminFormsFormIdQuestionsQuestionIdChoicesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/layanan': typeof AdminLayananRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -181,7 +197,7 @@ export interface FileRoutesByTo {
   '/admin/survey': typeof AdminSurveyIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
   '/guest/survey': typeof GuestSurveyIndexRoute
-  '/admin/forms/$formId/questions': typeof AdminFormsFormIdQuestionsRouteWithChildren
+  '/admin/forms/$formId/questions': typeof AdminFormsFormIdQuestionsIndexRoute
   '/admin/forms/$formId/questions/$questionId/choices': typeof AdminFormsFormIdQuestionsQuestionIdChoicesRoute
 }
 export interface FileRoutesById {
@@ -189,6 +205,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/layanan': typeof AdminLayananRoute
   '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -206,6 +223,7 @@ export interface FileRoutesById {
   '/admin/users/': typeof AdminUsersIndexRoute
   '/guest/survey/': typeof GuestSurveyIndexRoute
   '/admin/forms/$formId/questions': typeof AdminFormsFormIdQuestionsRouteWithChildren
+  '/admin/forms/$formId/questions/': typeof AdminFormsFormIdQuestionsIndexRoute
   '/admin/forms/$formId/questions/$questionId/choices': typeof AdminFormsFormIdQuestionsQuestionIdChoicesRoute
 }
 export interface FileRouteTypes {
@@ -214,6 +232,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/sitemap.xml'
     | '/admin/layanan'
     | '/admin/profile'
     | '/admin/settings'
@@ -231,11 +250,13 @@ export interface FileRouteTypes {
     | '/admin/users/'
     | '/guest/survey/'
     | '/admin/forms/$formId/questions'
+    | '/admin/forms/$formId/questions/'
     | '/admin/forms/$formId/questions/$questionId/choices'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
+    | '/sitemap.xml'
     | '/admin/layanan'
     | '/admin/profile'
     | '/admin/settings'
@@ -259,6 +280,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/sitemap.xml'
     | '/admin/layanan'
     | '/admin/profile'
     | '/admin/settings'
@@ -276,6 +298,7 @@ export interface FileRouteTypes {
     | '/admin/users/'
     | '/guest/survey/'
     | '/admin/forms/$formId/questions'
+    | '/admin/forms/$formId/questions/'
     | '/admin/forms/$formId/questions/$questionId/choices'
   fileRoutesById: FileRoutesById
 }
@@ -283,6 +306,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   GuestIkmRoute: typeof GuestIkmRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   GuestSurveyFormIdRoute: typeof GuestSurveyFormIdRoute
@@ -291,6 +315,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -431,6 +462,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFormsFormIdQuestionsRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/admin/forms/$formId/questions/': {
+      id: '/admin/forms/$formId/questions/'
+      path: '/'
+      fullPath: '/admin/forms/$formId/questions/'
+      preLoaderRoute: typeof AdminFormsFormIdQuestionsIndexRouteImport
+      parentRoute: typeof AdminFormsFormIdQuestionsRoute
+    }
     '/admin/forms/$formId/questions/$questionId/choices': {
       id: '/admin/forms/$formId/questions/$questionId/choices'
       path: '/$questionId/choices'
@@ -442,11 +480,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminFormsFormIdQuestionsRouteChildren {
+  AdminFormsFormIdQuestionsIndexRoute: typeof AdminFormsFormIdQuestionsIndexRoute
   AdminFormsFormIdQuestionsQuestionIdChoicesRoute: typeof AdminFormsFormIdQuestionsQuestionIdChoicesRoute
 }
 
 const AdminFormsFormIdQuestionsRouteChildren: AdminFormsFormIdQuestionsRouteChildren =
   {
+    AdminFormsFormIdQuestionsIndexRoute: AdminFormsFormIdQuestionsIndexRoute,
     AdminFormsFormIdQuestionsQuestionIdChoicesRoute:
       AdminFormsFormIdQuestionsQuestionIdChoicesRoute,
   }
@@ -496,6 +536,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   LoginRoute: LoginRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   GuestIkmRoute: GuestIkmRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   GuestSurveyFormIdRoute: GuestSurveyFormIdRoute,

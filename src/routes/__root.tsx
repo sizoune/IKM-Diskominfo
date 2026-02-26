@@ -25,6 +25,31 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			{
 				title: "IKM — Dinas Komunikasi dan Informatika",
 			},
+			{
+				name: "description",
+				content:
+					"Indeks Kepuasan Masyarakat (IKM) — Sistem survei kepuasan masyarakat terhadap pelayanan publik Dinas Komunikasi dan Informatika, Kementerian Komunikasi dan Digital.",
+			},
+			{
+				property: "og:type",
+				content: "website",
+			},
+			{
+				property: "og:site_name",
+				content: "IKM Diskominfo",
+			},
+			{
+				property: "og:locale",
+				content: "id_ID",
+			},
+			{
+				name: "twitter:card",
+				content: "summary_large_image",
+			},
+			{
+				name: "theme-color",
+				content: "#4f46e5",
+			},
 		],
 		links: [
 			{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -41,6 +66,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				rel: "stylesheet",
 				href: appCss,
 			},
+			{ rel: "manifest", href: "/manifest.json" },
+			{ rel: "icon", href: "/favicon.ico" },
 		],
 	}),
 	component: RootComponent,

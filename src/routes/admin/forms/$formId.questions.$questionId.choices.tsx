@@ -3,7 +3,18 @@ import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { DataTable } from "@/components/data-table";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -65,6 +76,7 @@ function ChoicesPage() {
 	const [label, setLabel] = useState("");
 	const [value, setValue] = useState("");
 	const [kode, setKode] = useState("");
+	const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
 	const createMut = useMutation({
 		mutationFn: createChoice,
@@ -72,7 +84,11 @@ function ChoicesPage() {
 			queryClient.invalidateQueries({
 				queryKey: ["choices", questionId],
 			});
+			toast.success("Pilihan berhasil ditambahkan");
 			resetDialog();
+		},
+		onError: () => {
+			toast.error("Gagal menambahkan pilihan");
 		},
 	});
 
@@ -82,7 +98,11 @@ function ChoicesPage() {
 			queryClient.invalidateQueries({
 				queryKey: ["choices", questionId],
 			});
+			toast.success("Pilihan berhasil diperbarui");
 			resetDialog();
+		},
+		onError: () => {
+			toast.error("Gagal memperbarui pilihan");
 		},
 	});
 
@@ -92,6 +112,10 @@ function ChoicesPage() {
 			queryClient.invalidateQueries({
 				queryKey: ["choices", questionId],
 			});
+			toast.success("Pilihan berhasil dihapus");
+		},
+		onError: () => {
+			toast.error("Gagal menghapus pilihan");
 		},
 	});
 
@@ -149,13 +173,9 @@ function ChoicesPage() {
 					<Button
 						variant="ghost"
 						size="icon"
-						onClick={() =>
-							deleteMut.mutate({
-								data: row.original.choiceId,
-							})
-						}
+						onClick={() => setDeleteTarget(row.original.choiceId)}
 					>
-						<Trash2 className="size-4" />
+						<Trash2 className="size-4 text-destructive" />
 					</Button>
 				</div>
 			),
@@ -207,7 +227,7 @@ function ChoicesPage() {
 									required
 								/>
 							</div>
-							<div className="grid grid-cols-2 gap-4">
+							<div className={editing ? "grid grid-cols-2 gap-4" : ""}>
 								<div className="space-y-2">
 									<Label>Nilai</Label>
 									<Input
@@ -215,13 +235,15 @@ function ChoicesPage() {
 										onChange={(e) => setValue(e.target.value)}
 									/>
 								</div>
-								<div className="space-y-2">
-									<Label>Kode</Label>
-									<Input
-										value={kode}
-										onChange={(e) => setKode(e.target.value)}
-									/>
-								</div>
+								{editing && (
+									<div className="space-y-2">
+										<Label>Kode</Label>
+										<Input
+											value={kode}
+											onChange={(e) => setKode(e.target.value)}
+										/>
+									</div>
+								)}
 							</div>
 							<Button
 								type="submit"
@@ -234,7 +256,36 @@ function ChoicesPage() {
 					</DialogContent>
 				</Dialog>
 			</div>
-			<DataTable columns={columns} data={choicesList as ChoiceRow[]} />
+			<DataTable
+				columns={columns}
+				data={choicesList as ChoiceRow[]}
+				searchKey="label"
+				searchPlaceholder="Cari pilihan..."
+			/>
+			<AlertDialog open={deleteTarget !== null} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>Hapus Pilihan?</AlertDialogTitle>
+						<AlertDialogDescription>
+							Pilihan yang dihapus tidak dapat dikembalikan.
+						</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel>Batal</AlertDialogCancel>
+						<AlertDialogAction
+							className="bg-destructive text-white hover:bg-destructive/90"
+							onClick={() => {
+								if (deleteTarget !== null) {
+									deleteMut.mutate({ data: deleteTarget });
+									setDeleteTarget(null);
+								}
+							}}
+						>
+							Hapus
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
 		</div>
 	);
 }

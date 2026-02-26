@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { db } from "@/db/index";
 import { choices } from "@/db/schema/forms";
 
@@ -23,11 +23,23 @@ export const createChoice = createServerFn({ method: "POST" })
 	)
 	.handler(async ({ data }) => {
 		const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+		// Auto-generate kode if not provided
+		let kodeVal = data.kode ?? "";
+		if (!kodeVal) {
+			const [result] = await db
+				.select({ total: count() })
+				.from(choices)
+				.where(eq(choices.formQuestionId, data.formQuestionId));
+			const choiceNumber = (result?.total ?? 0) + 1;
+			kodeVal = `${data.formQuestionId}.${choiceNumber}`;
+		}
+
 		await db.insert(choices).values({
 			formQuestionId: data.formQuestionId,
 			label: data.label,
 			value: data.value ?? null,
-			kode: data.kode ?? null,
+			kode: kodeVal,
 			createdAt: now,
 			updatedAt: now,
 		});

@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { eq } from "drizzle-orm";
+import { eq, max } from "drizzle-orm";
 import { db } from "@/db/index";
 import { forms } from "@/db/schema/forms";
 
@@ -21,10 +21,18 @@ export const createForm = createServerFn({ method: "POST" })
 	)
 	.handler(async ({ data }) => {
 		const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+		// Auto-increment order if not provided
+		let orderVal = data.order ?? 0;
+		if (orderVal === 0) {
+			const [result] = await db.select({ maxOrder: max(forms.order) }).from(forms);
+			orderVal = (result?.maxOrder ?? 0) + 1;
+		}
+
 		await db.insert(forms).values({
 			name: data.name,
 			desc: data.desc ?? null,
-			order: data.order ?? 0,
+			order: orderVal,
 			active: data.active ?? 1,
 			createdAt: now,
 			updatedAt: now,

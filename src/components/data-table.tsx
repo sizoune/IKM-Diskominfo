@@ -64,13 +64,18 @@ export function DataTable<TData, TValue>({
 					className="max-w-sm"
 				/>
 			)}
-			<div className="rounded-md border">
-				<Table>
+			<div className="rounded-md border overflow-x-auto">
+				<Table className="table-fixed w-full">
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header) => (
-									<TableHead key={header.id}>
+									<TableHead
+										key={header.id}
+										style={{
+											width: header.getSize(),
+										}}
+									>
 										{header.isPlaceholder
 											? null
 											: flexRender(
