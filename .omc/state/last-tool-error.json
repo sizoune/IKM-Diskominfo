@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"pnpm format 2>&1\",\"timeout\":30000,\"description\":\"Auto-format all files with Biome\"}",
+  "error": "Exit code 1\n\n> ikm-new@ format /Users/muhammadwildaniskandar/Projects/IKM_Diskominfo/ikm-new\n> biome format\n\n.vscode/settings.json format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n  × Formatter would have printed the following content:\n  \n     1  1 │   {\n     2    │ - ··\"files.watcherExclude\":·{\n     3    │ - ····\"**/routeTree.gen.ts\":·true\n     4    │ - ··},\n     5    │ - ··\"search.exclude\":·{\n     6    │ - ····\"**/routeTree.gen.ts\":·true\n     7    │ - ··},\n     8...",
+  "timestamp": "2026-02-26T07:48:59.768Z",
+  "retry_count": 2
+}

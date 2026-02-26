@@ -1,0 +1,231 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1772091170055,
+  "projectRoot": "/Users/muhammadwildaniskandar/Projects/IKM_Diskominfo/ikm-new",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "19.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "vite",
+        "version": "7.1.7",
+        "category": "build"
+      },
+      {
+        "name": "vitest",
+        "version": "3.0.5",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "pnpm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "pnpm build",
+    "testCommand": "pnpm test",
+    "lintCommand": "pnpm lint",
+    "devCommand": "pnpm dev",
+    "scripts": {
+      "dev": "vite dev --port 3000",
+      "build": "vite build",
+      "preview": "vite preview",
+      "test": "vitest run",
+      "format": "biome format",
+      "lint": "biome lint",
+      "check": "biome check",
+      "db:generate": "drizzle-kit generate",
+      "db:migrate": "drizzle-kit migrate",
+      "db:push": "drizzle-kit push",
+      "db:pull": "drizzle-kit pull",
+      "db:studio": "drizzle-kit studio"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "src"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "drizzle": {
+      "path": "drizzle",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1772091170027,
+      "keyFiles": [
+        "0000_daffy_vengeance.sql"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 9,
+      "lastAccessed": 1772091170027,
+      "keyFiles": [
+        "drizzle.svg",
+        "favicon.ico",
+        "komdigi.png",
+        "logo192.png",
+        "logo512.png"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 3,
+      "lastAccessed": 1772091170038,
+      "keyFiles": [
+        "routeTree.gen.ts",
+        "router.tsx",
+        "styles.css"
+      ]
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 3,
+      "lastAccessed": 1772091170039,
+      "keyFiles": [
+        "data-table.tsx",
+        "public-footer.tsx",
+        "public-navbar.tsx"
+      ]
+    },
+    "src/lib": {
+      "path": "src/lib",
+      "purpose": "Library code",
+      "fileCount": 9,
+      "lastAccessed": 1772091170040,
+      "keyFiles": [
+        "auth-client.ts",
+        "auth-guard.ts",
+        "auth.ts"
+      ]
+    },
+    "src/routes": {
+      "path": "src/routes",
+      "purpose": "Route handlers",
+      "fileCount": 3,
+      "lastAccessed": 1772091170040,
+      "keyFiles": [
+        "__root.tsx",
+        "index.tsx",
+        "login.tsx"
+      ]
+    },
+    "src/scripts": {
+      "path": "src/scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 1,
+      "lastAccessed": 1772091170041,
+      "keyFiles": [
+        "migrate-users.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/routes/guest/survey.index.tsx",
+      "accessCount": 10,
+      "lastAccessed": 1772092033423,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/login.tsx",
+      "accessCount": 6,
+      "lastAccessed": 1772091992239,
+      "type": "file"
+    },
+    {
+      "path": "src/components/public-navbar.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1772091889350,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/admin/route.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1772091909135,
+      "type": "file"
+    },
+    {
+      "path": "src/components/public-footer.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1772091910763,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/admin/index.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1772091939909,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/index.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1772091957304,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/guest/ikm.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1772091968509,
+      "type": "file"
+    },
+    {
+      "path": "src/styles.css",
+      "accessCount": 4,
+      "lastAccessed": 1772091988148,
+      "type": "file"
+    },
+    {
+      "path": "src/routes/__root.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772091633547,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 1,
+      "lastAccessed": 1772091646130,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}

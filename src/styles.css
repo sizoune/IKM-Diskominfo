@@ -112,6 +112,11 @@ code {
   }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
 @layer utilities {
   .glass-card {
     @apply backdrop-blur-xl border shadow-xl;
@@ -123,5 +128,8 @@ code {
   }
   .gradient-text {
     @apply bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent;
+  }
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
   }
 }

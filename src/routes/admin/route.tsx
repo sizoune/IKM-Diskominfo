@@ -6,7 +6,6 @@ import {
 } from "@tanstack/react-router";
 import {
 	BarChart3,
-	Building2,
 	ClipboardList,
 	FileText,
 	Image,
@@ -18,6 +17,7 @@ import {
 	Users2,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -78,20 +78,31 @@ function AdminLayout() {
 		navigate({ to: "/login" });
 	}
 
+	const roleLabel = isSuperAdmin ? "Super Admin" : "Admin";
+
 	return (
 		<SidebarProvider>
 			<Sidebar>
-				<SidebarHeader className="border-b border-sidebar-border px-4 py-3">
-					<Link to="/admin" className="flex items-center gap-2">
-						<Building2 className="size-5" />
-						<span className="font-bold text-lg gradient-text">
+				<SidebarHeader className="px-4 py-4">
+					<Link to="/admin" className="flex items-center gap-3">
+						<div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-white/10 p-1 ring-1 ring-white/20">
+							<img
+								src="/komdigi.png"
+								alt="Logo Komdigi"
+								className="size-7 object-contain"
+							/>
+						</div>
+						<span className="font-bold text-lg gradient-text leading-tight">
 							IKM Diskominfo
 						</span>
 					</Link>
+					<Separator className="mt-3 bg-white/10" />
 				</SidebarHeader>
 				<SidebarContent>
 					<SidebarGroup>
-						<SidebarGroupLabel>Menu</SidebarGroupLabel>
+						<SidebarGroupLabel className="text-xs font-semibold uppercase tracking-widest opacity-50 px-3">
+							Menu
+						</SidebarGroupLabel>
 						<SidebarGroupContent>
 							<SidebarMenu>
 								{navItems.map((item) => (
@@ -100,12 +111,13 @@ function AdminLayout() {
 											<Link
 												to={item.to}
 												activeOptions={item.exact ? { exact: true } : undefined}
+												className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-sidebar-accent"
 												activeProps={{
 													className:
-														"bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg",
+														"bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg border-l-2 border-white/30 shadow-md",
 												}}
 											>
-												<item.icon className="size-4" />
+												<item.icon className="size-4 shrink-0 transition-transform duration-200 group-hover:scale-110" />
 												<span>{item.label}</span>
 											</Link>
 										</SidebarMenuButton>
@@ -116,7 +128,9 @@ function AdminLayout() {
 					</SidebarGroup>
 					{isSuperAdmin && (
 						<SidebarGroup>
-							<SidebarGroupLabel>Super Admin</SidebarGroupLabel>
+							<SidebarGroupLabel className="text-xs font-semibold uppercase tracking-widest opacity-50 px-3">
+								Super Admin
+							</SidebarGroupLabel>
 							<SidebarGroupContent>
 								<SidebarMenu>
 									{superAdminItems.map((item) => (
@@ -124,12 +138,13 @@ function AdminLayout() {
 											<SidebarMenuButton asChild>
 												<Link
 													to={item.to}
+													className="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:bg-sidebar-accent"
 													activeProps={{
 														className:
-															"bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg",
+															"bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg border-l-2 border-white/30 shadow-md",
 													}}
 												>
-													<item.icon className="size-4" />
+													<item.icon className="size-4 shrink-0 transition-transform duration-200 group-hover:scale-110" />
 													<span>{item.label}</span>
 												</Link>
 											</SidebarMenuButton>
@@ -140,32 +155,49 @@ function AdminLayout() {
 						</SidebarGroup>
 					)}
 				</SidebarContent>
-				<SidebarFooter className="border-t p-3">
+				<SidebarFooter className="border-t border-white/10 p-3">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" className="w-full justify-start gap-2">
-								<Avatar className="size-7">
-									<AvatarFallback className="text-xs">
-										{session.user.name?.charAt(0).toUpperCase() ?? "U"}
-									</AvatarFallback>
-								</Avatar>
-								<div className="flex flex-col items-start text-sm">
-									<span className="font-medium">{session.user.name}</span>
-									<span className="text-xs text-muted-foreground">
-										{session.user.role}
+							<Button
+								variant="ghost"
+								className="w-full justify-start gap-3 rounded-xl px-3 py-2 h-auto hover:bg-sidebar-accent transition-all duration-200"
+							>
+								<div className="relative shrink-0">
+									<Avatar className="size-8 ring-2 ring-indigo-400/50 ring-offset-1 ring-offset-transparent">
+										<AvatarFallback className="bg-gradient-to-br from-indigo-500 to-violet-500 text-white text-xs font-bold">
+											{session.user.name?.charAt(0).toUpperCase() ?? "U"}
+										</AvatarFallback>
+									</Avatar>
+									<span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full border-2 border-sidebar bg-emerald-400" />
+								</div>
+								<div className="flex flex-col items-start min-w-0">
+									<span className="font-semibold text-sm truncate max-w-[120px]">
+										{session.user.name}
 									</span>
+									<Badge
+										variant="secondary"
+										className="mt-0.5 h-4 rounded-sm px-1.5 text-[10px] font-medium bg-indigo-500/20 text-indigo-300 border-indigo-500/30"
+									>
+										{roleLabel}
+									</Badge>
 								</div>
 							</Button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent align="start" className="w-48">
-							<DropdownMenuItem asChild>
-								<Link to="/admin/profile">
-									<UserCircle className="mr-2 size-4" />
-									Profile
+						<DropdownMenuContent
+							align="start"
+							className="w-52 rounded-xl shadow-xl"
+						>
+							<DropdownMenuItem asChild className="rounded-lg cursor-pointer">
+								<Link to="/admin/profile" className="flex items-center gap-2">
+									<UserCircle className="size-4 text-muted-foreground" />
+									<span>Profile</span>
 								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem onClick={handleSignOut}>
+							<DropdownMenuItem
+								onClick={handleSignOut}
+								className="rounded-lg cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
+							>
 								<LogOut className="mr-2 size-4" />
 								Sign Out
 							</DropdownMenuItem>
@@ -174,12 +206,19 @@ function AdminLayout() {
 				</SidebarFooter>
 			</Sidebar>
 			<SidebarInset>
-				<header className="flex h-14 items-center gap-2 border-b px-4">
-					<SidebarTrigger />
-					<Separator orientation="vertical" className="h-6" />
-					<span className="text-sm font-medium">Admin Panel</span>
+				<header className="flex h-16 items-center gap-3 border-b bg-background/95 backdrop-blur px-4 sticky top-0 z-10">
+					<SidebarTrigger className="rounded-lg" />
+					<Separator orientation="vertical" className="h-5" />
+					<div className="flex items-center gap-2">
+						<span className="text-sm font-semibold text-foreground">
+							Admin Panel
+						</span>
+						<span className="text-muted-foreground text-sm">
+							/ IKM Diskominfo
+						</span>
+					</div>
 				</header>
-				<main className="flex-1 p-4">
+				<main className="flex-1 p-6">
 					<Outlet />
 				</main>
 			</SidebarInset>

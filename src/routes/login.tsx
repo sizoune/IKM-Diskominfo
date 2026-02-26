@@ -1,5 +1,9 @@
-import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
-import { Building2 } from "lucide-react";
+import {
+	createFileRoute,
+	Link,
+	redirect,
+	useNavigate,
+} from "@tanstack/react-router";
 import { useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +17,7 @@ export const Route = createFileRoute("/login")({
 	beforeLoad: async () => {
 		const session = await getSession();
 		if (session) {
-			throw redirect({ to: '/admin' })
+			throw redirect({ to: "/admin" });
 		}
 	},
 });
@@ -52,29 +56,49 @@ function LoginPage() {
 	return (
 		<div className="min-h-screen flex">
 			{/* Left branded panel — hidden on mobile */}
-			<div className="hidden flex-1 flex-col items-center justify-center bg-gradient-to-br from-indigo-600 to-violet-700 text-white lg:flex relative overflow-hidden">
+			<div className="hidden flex-1 flex-col items-center justify-center bg-gradient-to-br from-indigo-700 via-violet-700 to-purple-800 text-white lg:flex relative overflow-hidden">
 				{/* Decorative orbs */}
 				<div className="pointer-events-none absolute -top-20 -left-20 size-64 rounded-full bg-white/10 blur-3xl" />
 				<div className="pointer-events-none absolute -bottom-24 -right-24 size-80 rounded-full bg-purple-400/15 blur-3xl" />
+				<div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[500px] rounded-full bg-indigo-500/10 blur-3xl" />
 
-				<div className="relative">
-					<Building2 className="size-16 text-white" />
+				<div className="relative flex flex-col items-center gap-4">
+					<div className="rounded-2xl bg-white/15 backdrop-blur-sm p-5 ring-1 ring-white/20 shadow-2xl">
+						<img
+							src="/komdigi.png"
+							alt="Logo Komdigi"
+							className="size-20 object-contain"
+						/>
+					</div>
+					<div className="text-center">
+						<h1 className="text-2xl font-bold tracking-tight">
+							IKM Diskominfo
+						</h1>
+						<p className="mt-1 text-sm font-medium text-indigo-200">
+							Kementerian Komunikasi dan Digital
+						</p>
+						<p className="mt-3 max-w-xs text-center text-sm text-indigo-300 leading-relaxed">
+							Indeks Kepuasan Masyarakat — Dinas Komunikasi dan Informatika
+						</p>
+					</div>
 				</div>
-				<h1 className="relative mt-4 text-3xl font-bold">IKM Diskominfo</h1>
-				<p className="relative mt-2 max-w-xs text-center text-sm text-indigo-200">
-					Indeks Kepuasan Masyarakat — Dinas Komunikasi dan Informatika
-				</p>
 			</div>
 
 			{/* Right form panel */}
-			<div className="flex flex-1 items-center justify-center bg-[#F5F3FF] px-4">
+			<div className="flex flex-1 items-center justify-center bg-gradient-to-br from-indigo-50 to-violet-50 px-4">
 				<div className="w-full max-w-sm">
-					<Card className="backdrop-blur bg-white/80 border-white/20 shadow-xl">
-						<CardHeader className="text-center">
-							<div className="mb-2 flex justify-center lg:hidden">
-								<Building2 className="size-10 text-indigo-600" />
+					<Card className="backdrop-blur bg-white/90 border-indigo-100/60 shadow-xl shadow-indigo-100/50">
+						<CardHeader className="text-center pb-2">
+							<div className="mb-3 flex justify-center lg:hidden">
+								<div className="rounded-xl bg-indigo-50 p-3">
+									<img
+										src="/komdigi.png"
+										alt="Logo Komdigi"
+										className="size-10 object-contain"
+									/>
+								</div>
 							</div>
-							<CardTitle className="text-2xl">Masuk</CardTitle>
+							<CardTitle className="text-2xl text-indigo-900">Masuk</CardTitle>
 							<p className="text-sm text-muted-foreground">
 								Masuk ke panel admin IKM
 							</p>
