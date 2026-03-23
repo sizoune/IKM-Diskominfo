@@ -25,7 +25,7 @@
     "@aws-sdk/client-s3": "^3.998.0",
     "@aws-sdk/s3-request-presigner": "^3.998.0",
     "@faker-js/faker": "^10.0.0",
-    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/vite": "^4.2.2",
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-devtools": "^0.7.0",
     "@tanstack/react-form": "^1.0.0",
