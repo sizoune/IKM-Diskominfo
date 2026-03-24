@@ -129,7 +129,7 @@ function BukuTamuReportPage() {
 								</TableHeader>
 								<TableBody>
 									{rows.map((row, index) => (
-										<TableRow key={`${row.tamuId}-${index}`}>
+										<TableRow key={row.tamuId}>
 											<TableCell>{index + 1}</TableCell>
 											<TableCell>
 												{row.surveyDate

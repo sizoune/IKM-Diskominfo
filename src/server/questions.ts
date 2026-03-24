@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { and, count, eq, max } from "drizzle-orm";
+import { count, eq, max } from "drizzle-orm";
 import { db } from "@/db/index";
 import { formQuestions } from "@/db/schema/forms";
 

@@ -19,6 +19,7 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { account, user } from "../db/schema/auth";
 import { legacyUsers } from "../db/schema/legacy-users";
 
+// biome-ignore lint/style/noNonNullAssertion: env var required for script
 const db = drizzle(process.env.DATABASE_URL!);
 
 const DEFAULT_PASSWORD = "masukhaja";
