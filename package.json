@@ -71,5 +71,10 @@
     "vite": "^8.0.5",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.1.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "fast-xml-builder": "^1.1.7"
+    }
   }
 }
