@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BarChart3, ClipboardList, Shield, Sparkles } from "lucide-react";
 import { FeatureCard } from "@/components/feature-card";
@@ -7,6 +8,8 @@ import { PublicFooter } from "@/components/public-footer";
 import { PublicNavbar } from "@/components/public-navbar";
 import { SectionHeader } from "@/components/section-header";
 import { Button } from "@/components/ui/button";
+import { getMutu } from "@/lib/ikm";
+import { getAvailableYears, getIkmData } from "@/server/ikm";
 
 export const Route = createFileRoute("/")({
 	head: () => ({
@@ -34,6 +37,30 @@ export const Route = createFileRoute("/")({
 
 function LandingPage() {
 	const currentYear = new Date().getFullYear();
+
+	const { data: years = [] } = useQuery({
+		queryKey: ["ikm-years"],
+		queryFn: () => getAvailableYears(),
+	});
+
+	const displayYear = years.length > 0 ? Math.max(...years) : currentYear - 1;
+
+	const { data: ikmData = [] } = useQuery({
+		queryKey: ["ikm-data", displayYear],
+		queryFn: () => getIkmData({ data: displayYear }),
+		enabled: years.length > 0,
+	});
+
+	const hasData = ikmData.length > 0;
+	const totalAvg = hasData
+		? ikmData.reduce((sum, d) => sum + d.avgValue, 0) / ikmData.length
+		: 0;
+	const overall = hasData ? getMutu(totalAvg) : null;
+	const totalResponden = hasData
+		? Math.max(...ikmData.map((d) => d.totalResponden))
+		: 0;
+	const unsurCount = ikmData.length;
+
 	return (
 		<div className="flex min-h-screen flex-col bg-background">
 			<PublicNavbar />
@@ -105,21 +132,27 @@ function LandingPage() {
 					</div>
 					<div className="space-y-3">
 						<LiveDataCard
-							year={currentYear - 1}
-							score={3.42}
-							mutuLabel="MUTU B · BAIK"
+							year={displayYear}
+							score={hasData ? totalAvg : null}
+							mutuLabel={
+								overall
+									? `MUTU ${overall.grade} · ${overall.label.toUpperCase()}`
+									: "MENUNGGU DATA"
+							}
 						/>
 						<div className="grid grid-cols-2 gap-2.5">
 							<div className="rounded-xl border border-slate-200 bg-white p-3.5">
 								<div className="text-xl font-black text-[var(--navy)]">
-									1.284
+									{hasData ? totalResponden.toLocaleString("id-ID") : "—"}
 								</div>
 								<div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 									Responden
 								</div>
 							</div>
 							<div className="rounded-xl border border-amber-200 bg-[var(--amber-soft)] p-3.5">
-								<div className="text-xl font-black text-amber-800">9</div>
+								<div className="text-xl font-black text-amber-800">
+									{hasData ? unsurCount : "—"}
+								</div>
 								<div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
 									Unsur Nilai
 								</div>
@@ -136,22 +169,27 @@ function LandingPage() {
 				<div className="container relative mx-auto grid max-w-5xl gap-6 md:grid-cols-4">
 					<div className="border-l-2 border-[var(--amber)] pl-4">
 						<div className="text-2xl font-black md:text-3xl">
-							<span className="text-[var(--amber)]">3.42</span>
+							<span className="text-[var(--amber)]">
+								{hasData ? totalAvg.toFixed(2) : "—"}
+							</span>
 							<span className="text-base text-slate-400">/4.00</span>
 						</div>
 						<div className="mt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--sky)]">
-							Indeks Tahun {currentYear - 1}
+							Indeks Tahun {displayYear}
 						</div>
 					</div>
 					<div className="border-l-2 border-[var(--amber)] pl-4">
-						<div className="text-2xl font-black md:text-3xl">1.284</div>
+						<div className="text-2xl font-black md:text-3xl">
+							{hasData ? totalResponden.toLocaleString("id-ID") : "—"}
+						</div>
 						<div className="mt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--sky)]">
 							Total Responden
 						</div>
 					</div>
 					<div className="border-l-2 border-[var(--amber)] pl-4">
 						<div className="text-2xl font-black md:text-3xl">
-							9 <span className="text-sm text-slate-400">unsur</span>
+							{hasData ? unsurCount : "—"}{" "}
+							<span className="text-sm text-slate-400">unsur</span>
 						</div>
 						<div className="mt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--sky)]">
 							Aspek Penilaian
@@ -159,7 +197,7 @@ function LandingPage() {
 					</div>
 					<div className="border-l-2 border-[var(--amber)] pl-4">
 						<div className="text-2xl font-black md:text-3xl text-[var(--amber)]">
-							B
+							{overall ? overall.grade : "—"}
 						</div>
 						<div className="mt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--sky)]">
 							Mutu Pelayanan
