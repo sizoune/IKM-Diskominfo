@@ -1,14 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-	BarChart3,
-	CheckCircle2,
-	ClipboardList,
-	Shield,
-	Star,
-	Users,
-} from "lucide-react";
+import { BarChart3, ClipboardList, Shield, Sparkles } from "lucide-react";
+import { FeatureCard } from "@/components/feature-card";
+import { LiveDataCard } from "@/components/live-data-card";
+import { PixelBlocks } from "@/components/pixel-blocks";
 import { PublicFooter } from "@/components/public-footer";
 import { PublicNavbar } from "@/components/public-navbar";
+import { SectionHeader } from "@/components/section-header";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
@@ -36,266 +33,321 @@ export const Route = createFileRoute("/")({
 });
 
 function LandingPage() {
+	const currentYear = new Date().getFullYear();
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
+		<div className="flex min-h-screen flex-col bg-background">
 			<PublicNavbar />
 
-			{/* Hero */}
-			<section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-violet-700 to-purple-800 px-4 py-20 text-center text-white md:py-32">
-				{/* Decorative orbs */}
-				<div className="pointer-events-none absolute -top-24 -left-24 size-80 rounded-full bg-white/10 blur-3xl animate-float" />
-				<div className="pointer-events-none absolute -bottom-32 -right-32 size-96 rounded-full bg-purple-400/20 blur-3xl" />
-				<div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] rounded-full bg-indigo-500/10 blur-3xl" />
-
-				<div className="relative mx-auto max-w-3xl">
-					<div className="mb-6 flex justify-center">
-						<div className="rounded-2xl bg-white/15 backdrop-blur-sm p-4 ring-1 ring-white/20 shadow-2xl">
-							<img
-								src="/komdigi.png"
-								alt="Logo Diskominfo Tabalong"
-								className="h-16 w-auto object-contain"
-							/>
+			{/* === Hero === */}
+			<section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 px-4 py-16 md:py-20">
+				<PixelBlocks className="absolute top-16 right-8 hidden md:grid" />
+				<div className="container mx-auto grid max-w-5xl gap-10 md:grid-cols-[1.3fr_1fr] md:items-center">
+					<div>
+						<span className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-[var(--amber-soft)] px-3 py-1.5 text-[11px] font-bold text-amber-800">
+							<span className="size-1.5 rounded-full bg-[var(--amber)]" />
+							Survei Resmi {currentYear} · Terbuka untuk warga
+						</span>
+						<h1 className="text-3xl font-black leading-[1.05] tracking-tight text-[var(--navy)] md:text-5xl">
+							Suara Anda,
+							<br />
+							arah <span className="accent-underline">pelayanan</span>
+							<br />
+							<span className="text-[var(--blue)]">kami.</span>
+						</h1>
+						<p className="mt-4 max-w-md text-base leading-relaxed text-slate-700">
+							Berpartisipasilah dalam Indeks Kepuasan Masyarakat Diskominfo
+							Kabupaten Tabalong. Pendapat Anda menjadi bahan evaluasi nyata
+							untuk pelayanan publik yang lebih baik.
+						</p>
+						<div className="mt-6 flex flex-wrap gap-3">
+							<Button
+								asChild
+								size="lg"
+								className="min-h-[44px] bg-[var(--navy)] px-6 font-bold text-white hover:bg-[var(--navy-2)]"
+							>
+								<Link to="/guest/survey">
+									<ClipboardList className="mr-2 size-5" />
+									Mulai Survey
+								</Link>
+							</Button>
+							<Button
+								asChild
+								variant="outline"
+								size="lg"
+								className="min-h-[44px] border-slate-200 px-6 font-bold text-[var(--navy)]"
+							>
+								<Link to="/guest/ikm">
+									<BarChart3 className="mr-2 size-5" />
+									Lihat Hasil IKM
+								</Link>
+							</Button>
+						</div>
+						<div className="mt-7 flex flex-wrap items-center gap-6 border-t border-slate-200 pt-5 text-[11px] text-muted-foreground">
+							<div>
+								<div className="text-sm font-extrabold text-[var(--navy)]">
+									5 menit
+								</div>
+								<div>Waktu pengisian</div>
+							</div>
+							<div>
+								<div className="text-sm font-extrabold text-[var(--navy)]">
+									Anonim
+								</div>
+								<div>Tanpa akun</div>
+							</div>
+							<div>
+								<div className="text-sm font-extrabold text-[var(--navy)]">
+									Real-time
+								</div>
+								<div>Data terbuka</div>
+							</div>
 						</div>
 					</div>
-					<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-xs font-medium text-indigo-100 ring-1 ring-white/20">
-						<Star className="size-3.5 fill-indigo-200 text-indigo-200" />
-						Dinas Komunikasi dan Informatika Kabupaten Tabalong
-					</div>
-					<h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-						Indeks Kepuasan
-						<br />
-						<span className="text-indigo-200">Masyarakat</span>
-					</h1>
-					<p className="mt-4 text-lg text-indigo-100 leading-relaxed">
-						Dinas Komunikasi dan Informatika — Survei Kepuasan Masyarakat
-						<br className="hidden md:inline" />
-						terhadap Pelayanan Publik
-					</p>
-					<div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-						<Button
-							asChild
-							size="lg"
-							className="min-h-[44px] bg-emerald-500 text-white hover:bg-emerald-400 shadow-lg shadow-emerald-900/30 font-semibold px-8"
-						>
-							<Link to="/guest/survey">
-								<ClipboardList className="mr-2 size-5" />
-								Mulai Survey
-							</Link>
-						</Button>
-						<Button
-							asChild
-							variant="outline"
-							size="lg"
-							className="min-h-[44px] border-white/30 bg-white/10 text-white hover:bg-white/20 backdrop-blur-sm font-semibold px-8"
-						>
-							<Link to="/guest/ikm">
-								<BarChart3 className="mr-2 size-5" />
-								Lihat Hasil IKM
-							</Link>
-						</Button>
+					<div className="space-y-3">
+						<LiveDataCard
+							year={currentYear - 1}
+							score={3.42}
+							mutuLabel="MUTU B · BAIK"
+						/>
+						<div className="grid grid-cols-2 gap-2.5">
+							<div className="rounded-xl border border-slate-200 bg-white p-3.5">
+								<div className="text-xl font-black text-[var(--navy)]">
+									1.284
+								</div>
+								<div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+									Responden
+								</div>
+							</div>
+							<div className="rounded-xl border border-amber-200 bg-[var(--amber-soft)] p-3.5">
+								<div className="text-xl font-black text-amber-800">9</div>
+								<div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+									Unsur Nilai
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
 
-			{/* Feature Cards */}
-			<section className="px-4 py-16 bg-gradient-to-b from-background to-indigo-50/50">
-				<div className="mx-auto max-w-5xl">
-					<div className="mb-10 text-center">
-						<h2 className="text-2xl font-bold text-indigo-900 md:text-3xl">
-							Layanan Kami
-						</h2>
-						<p className="mt-2 text-sm text-muted-foreground">
-							Sistem penilaian pelayanan publik yang transparan dan akuntabel
-						</p>
+			{/* === Stats Banner === */}
+			<section className="relative overflow-hidden bg-[var(--navy)] px-4 py-10 text-white">
+				<div className="pointer-events-none absolute -top-10 -right-10 size-[200px] rounded-full border border-sky-400/20" />
+				<div className="pointer-events-none absolute -top-5 -right-5 size-[160px] rounded-full border border-sky-400/10" />
+				<div className="container relative mx-auto grid max-w-5xl gap-6 md:grid-cols-4">
+					<div className="border-l-2 border-[var(--amber)] pl-4">
+						<div className="text-2xl font-black md:text-3xl">
+							<span className="text-[var(--amber)]">3.42</span>
+							<span className="text-base text-slate-400">/4.00</span>
+						</div>
+						<div className="mt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--sky)]">
+							Indeks Tahun {currentYear - 1}
+						</div>
 					</div>
-					<div className="grid gap-6 md:grid-cols-3">
+					<div className="border-l-2 border-[var(--amber)] pl-4">
+						<div className="text-2xl font-black md:text-3xl">1.284</div>
+						<div className="mt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--sky)]">
+							Total Responden
+						</div>
+					</div>
+					<div className="border-l-2 border-[var(--amber)] pl-4">
+						<div className="text-2xl font-black md:text-3xl">
+							9 <span className="text-sm text-slate-400">unsur</span>
+						</div>
+						<div className="mt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--sky)]">
+							Aspek Penilaian
+						</div>
+					</div>
+					<div className="border-l-2 border-[var(--amber)] pl-4">
+						<div className="text-2xl font-black md:text-3xl text-[var(--amber)]">
+							B
+						</div>
+						<div className="mt-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--sky)]">
+							Mutu Pelayanan
+						</div>
+					</div>
+				</div>
+			</section>
+
+			{/* === Layanan === */}
+			<section className="px-4 py-16">
+				<div className="container mx-auto max-w-5xl">
+					<SectionHeader
+						kicker="Layanan Kami"
+						title="Sistem penilaian"
+						titleAccent="yang transparan"
+						subtitle="Tiga pilar utama platform IKM Diskominfo Tabalong untuk memastikan akuntabilitas pelayanan publik."
+					/>
+					<div className="grid gap-4 md:grid-cols-3">
 						<FeatureCard
-							icon={<ClipboardList className="size-6 text-white" />}
-							gradient="from-emerald-500 to-teal-500"
+							accent="navy"
+							icon={<ClipboardList className="size-5" />}
 							title="Survey Pelayanan"
-							description="Sampaikan penilaian Anda terhadap kualitas pelayanan publik secara mudah dan cepat melalui formulir digital kami."
+							description="Formulir digital mudah diisi tanpa registrasi. Sampaikan penilaian Anda dalam 5 menit dengan 9 unsur kepuasan."
 						/>
 						<FeatureCard
-							icon={<Shield className="size-6 text-white" />}
-							gradient="from-indigo-500 to-violet-500"
+							accent="red"
+							icon={<Shield className="size-5" />}
 							title="Transparansi Data"
-							description="Hasil survey terbuka untuk publik sebagai bentuk akuntabilitas dan komitmen pemerintah terhadap pelayanan prima."
+							description="Hasil survei terbuka untuk publik. Komitmen pemerintah terhadap akuntabilitas pelayanan prima."
 						/>
 						<FeatureCard
-							icon={<BarChart3 className="size-6 text-white" />}
-							gradient="from-violet-500 to-purple-600"
+							accent="amber"
+							icon={<BarChart3 className="size-5" />}
 							title="Hasil Real-time"
-							description="Pantau indeks kepuasan masyarakat secara real-time dengan visualisasi data yang selalu diperbarui secara berkala."
+							description="Pantau indeks kepuasan masyarakat dengan visualisasi data yang diperbarui secara berkala."
 						/>
 					</div>
 				</div>
 			</section>
 
-			{/* Tentang IKM */}
-			<section className="px-4 py-16 bg-white">
-				<div className="mx-auto max-w-5xl">
-					<div className="grid gap-10 md:grid-cols-2 md:items-center">
-						<div>
-							<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">
-								<Users className="size-3.5" />
-								Tentang IKM
-							</div>
-							<h2 className="text-2xl font-bold text-indigo-900 md:text-3xl leading-tight">
-								Apa itu Indeks Kepuasan Masyarakat?
-							</h2>
-							<p className="mt-4 text-sm text-gray-600 leading-relaxed">
-								Indeks Kepuasan Masyarakat (IKM) adalah data dan informasi
-								tentang tingkat kepuasan masyarakat yang diperoleh dari hasil
-								pengukuran secara kuantitatif dan kualitatif atas pendapat
-								masyarakat.
-							</p>
-							<p className="mt-3 text-sm text-gray-600 leading-relaxed">
-								Pengukuran IKM bertujuan untuk mengetahui tingkat kinerja unit
-								pelayanan secara berkala, sebagai bahan untuk menetapkan
-								kebijakan dalam rangka peningkatan kualitas pelayanan publik.
-							</p>
-							<div className="mt-6 flex flex-col gap-3">
-								{[
-									"Meningkatkan kualitas pelayanan publik",
-									"Mendorong partisipasi masyarakat",
-									"Akuntabilitas dan transparansi pemerintah",
-								].map((item) => (
-									<div key={item} className="flex items-start gap-2.5">
-										<CheckCircle2 className="size-4 text-emerald-500 mt-0.5 shrink-0" />
-										<span className="text-sm text-gray-700">{item}</span>
-									</div>
-								))}
-							</div>
+			{/* === Tentang IKM === */}
+			<section className="bg-slate-50 px-4 py-16">
+				<div className="container mx-auto grid max-w-5xl gap-10 md:grid-cols-2 md:items-center">
+					<div>
+						<SectionHeader
+							kicker="Tentang IKM"
+							title="Apa itu Indeks"
+							titleAccent="Kepuasan Masyarakat?"
+							align="left"
+						/>
+						<p className="text-sm leading-relaxed text-slate-700">
+							Indeks Kepuasan Masyarakat (IKM) adalah pengukuran kuantitatif dan
+							kualitatif tingkat kepuasan masyarakat terhadap pelayanan publik.
+							Bertujuan mengetahui kinerja unit pelayanan secara berkala sebagai
+							bahan kebijakan peningkatan kualitas.
+						</p>
+						<div className="mt-5 flex flex-col gap-2.5">
+							{[
+								"Meningkatkan kualitas pelayanan publik secara berkelanjutan",
+								"Mendorong partisipasi aktif masyarakat",
+								"Akuntabilitas dan transparansi pemerintah daerah",
+							].map((item) => (
+								<div key={item} className="flex items-start gap-2.5">
+									<span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-md bg-[var(--amber-soft)] text-[11px] font-black text-amber-800">
+										✓
+									</span>
+									<span className="text-sm text-slate-700">{item}</span>
+								</div>
+							))}
 						</div>
-						<div className="relative">
-							<div className="rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 p-8 text-white shadow-2xl shadow-indigo-200">
-								<div className="mb-4 flex justify-center">
-									<img
-										src="/komdigi.png"
-										alt="Logo Diskominfo Tabalong"
-										className="h-14 w-auto object-contain opacity-90"
-									/>
-								</div>
-								<h3 className="text-center text-lg font-bold">
-									Dinas Komunikasi dan Informatika
-									<br />
-									Kabupaten Tabalong
-								</h3>
-								<p className="mt-2 text-center text-sm text-indigo-200">
-									Sistem Survei Kepuasan Masyarakat
-								</p>
-								<div className="mt-6 grid grid-cols-2 gap-4">
-									<div className="rounded-xl bg-white/15 p-4 text-center backdrop-blur-sm">
-										<p className="text-2xl font-bold">9</p>
-										<p className="text-xs text-indigo-200 mt-1">
-											Unsur Penilaian
-										</p>
-									</div>
-									<div className="rounded-xl bg-white/15 p-4 text-center backdrop-blur-sm">
-										<p className="text-2xl font-bold">4</p>
-										<p className="text-xs text-indigo-200 mt-1">
-											Kategori Mutu
-										</p>
-									</div>
+					</div>
+					<div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--navy)] to-[var(--navy-2)] p-8 text-white">
+						<div className="absolute -bottom-2 -right-2 rotate-[-12deg] opacity-15">
+							<PixelBlocks size={18} gap={4} opacity={1} />
+						</div>
+						<span className="mb-3 inline-block rounded bg-[var(--amber)] px-2 py-0.5 text-[10px] font-black tracking-wider text-[var(--navy)]">
+							★ DISKOMINFO TABALONG
+						</span>
+						<h4 className="text-xl font-black">Sistem Survei IKM</h4>
+						<div className="mt-1 text-xs text-[var(--sky)]">
+							Berbasis Permenpan RB 14/2017
+						</div>
+						<div className="mt-6 grid grid-cols-2 gap-2.5">
+							<div className="rounded-lg border border-white/10 bg-white/5 p-3.5">
+								<div className="text-2xl font-black text-[var(--amber)]">9</div>
+								<div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-[var(--sky)]">
+									Unsur Penilaian
 								</div>
 							</div>
-							<div className="pointer-events-none absolute -bottom-4 -right-4 size-32 rounded-full bg-violet-200/50 blur-2xl" />
+							<div className="rounded-lg border border-white/10 bg-white/5 p-3.5">
+								<div className="text-2xl font-black text-[var(--amber)]">4</div>
+								<div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-[var(--sky)]">
+									Kategori Mutu
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			{/* Cara Mengisi Survey */}
-			<section className="px-4 py-16 bg-gradient-to-b from-indigo-50/50 to-background">
-				<div className="mx-auto max-w-4xl">
-					<div className="mb-10 text-center">
-						<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">
-							<ClipboardList className="size-3.5" />
-							Panduan
-						</div>
-						<h2 className="text-2xl font-bold text-indigo-900 md:text-3xl">
-							Cara Mengisi Survey
-						</h2>
-						<p className="mt-2 text-sm text-muted-foreground">
-							Tiga langkah mudah untuk berpartisipasi dalam survey IKM
-						</p>
-					</div>
-					<div className="grid gap-6 md:grid-cols-3">
+			{/* === Cara Mengisi Survey === */}
+			<section className="px-4 py-16">
+				<div className="container mx-auto max-w-4xl">
+					<SectionHeader
+						kicker="Panduan"
+						title="Tiga langkah"
+						titleAccent="mudah"
+						subtitle="Berpartisipasi dalam survei IKM hanya butuh 5 menit. Tidak perlu akun, sepenuhnya anonim."
+					/>
+					<div className="grid gap-4 md:grid-cols-3">
 						{[
 							{
 								step: "01",
-								title: "Buka Formulir Survey",
-								desc: 'Klik tombol "Mulai Survey" dan akses formulir penilaian yang tersedia secara online tanpa perlu membuat akun.',
+								title: "Buka Formulir",
+								desc: 'Klik "Mulai Survey" dan akses formulir penilaian online tanpa perlu membuat akun.',
 							},
 							{
 								step: "02",
 								title: "Isi Penilaian",
-								desc: "Berikan penilaian jujur pada setiap aspek pelayanan berdasarkan pengalaman langsung Anda.",
+								desc: "Berikan penilaian jujur pada setiap aspek pelayanan berdasarkan pengalaman Anda.",
 							},
 							{
 								step: "03",
 								title: "Kirim & Selesai",
-								desc: "Setelah semua pertanyaan terisi, kirim jawaban Anda. Hasil akan langsung terekam dalam sistem IKM.",
+								desc: "Setelah semua pertanyaan terisi, kirim jawaban. Hasil langsung terekam dalam sistem.",
 							},
 						].map(({ step, title, desc }) => (
 							<div
 								key={step}
-								className="relative rounded-xl border border-indigo-100 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+								className="relative overflow-hidden rounded-2xl border border-border bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-md"
 							>
-								<div className="mb-4 flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-600 to-violet-600 text-white text-lg font-bold shadow-md shadow-indigo-200">
+								<span className="absolute top-4 right-5 text-4xl font-black text-slate-100">
 									{step}
+								</span>
+								<div className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--blue)]">
+									Langkah {step}
 								</div>
-								<h3 className="mb-2 text-base font-semibold text-indigo-900">
+								<h4 className="mt-2 mb-2 text-base font-extrabold text-[var(--navy)]">
 									{title}
-								</h3>
-								<p className="text-sm text-gray-600 leading-relaxed">{desc}</p>
+								</h4>
+								<p className="text-sm leading-relaxed text-muted-foreground">
+									{desc}
+								</p>
 							</div>
 						))}
 					</div>
-					<div className="mt-10 text-center">
-						<Button
-							asChild
-							size="lg"
-							className="min-h-[44px] bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-200 font-semibold px-10"
-						>
-							<Link to="/guest/survey">
-								<ClipboardList className="mr-2 size-5" />
-								Isi Survey Sekarang
-							</Link>
-						</Button>
+				</div>
+			</section>
+
+			{/* === CTA Banner === */}
+			<section className="bg-slate-50 px-4 pt-4 pb-16">
+				<div className="container mx-auto max-w-5xl">
+					<div className="relative grid gap-6 overflow-hidden rounded-2xl bg-[var(--navy)] p-8 text-white md:grid-cols-[2fr_1fr] md:items-center md:p-10">
+						<div
+							className="pointer-events-none absolute -bottom-10 -left-10 size-[200px] rounded-full"
+							style={{
+								background:
+									"radial-gradient(circle, rgba(245,158,11,0.18), transparent 70%)",
+							}}
+							aria-hidden
+						/>
+						<div className="relative">
+							<h3 className="text-2xl font-black leading-tight md:text-3xl">
+								Siap berkontribusi untuk pelayanan{" "}
+								<span className="text-[var(--amber)]">yang lebih baik?</span>
+							</h3>
+							<p className="mt-2 text-sm leading-relaxed text-slate-300">
+								Mulai isi survei IKM sekarang. Setiap suara membantu Diskominfo
+								Tabalong meningkatkan kualitas layanan publik.
+							</p>
+						</div>
+						<div className="relative">
+							<Button
+								asChild
+								size="lg"
+								className="min-h-[48px] w-full bg-[var(--amber)] font-black tracking-wide text-[var(--navy)] hover:bg-amber-400"
+							>
+								<Link to="/guest/survey">
+									<Sparkles className="mr-2 size-5" />
+									ISI SURVEY SEKARANG
+								</Link>
+							</Button>
+						</div>
 					</div>
 				</div>
 			</section>
 
 			<PublicFooter />
-		</div>
-	);
-}
-
-function FeatureCard({
-	icon,
-	gradient,
-	title,
-	description,
-}: {
-	icon: React.ReactNode;
-	gradient: string;
-	title: string;
-	description: string;
-}) {
-	return (
-		<div className="group cursor-pointer rounded-xl border border-indigo-100/60 bg-white/80 backdrop-blur-sm shadow-md p-6 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-indigo-200">
-			<div
-				className={`mb-4 flex size-12 items-center justify-center rounded-xl bg-gradient-to-br ${gradient} shadow-md`}
-			>
-				{icon}
-			</div>
-			<h3 className="mb-2 text-base font-semibold text-indigo-900 group-hover:text-indigo-700 transition-colors">
-				{title}
-			</h3>
-			<p className="text-sm text-muted-foreground leading-relaxed">
-				{description}
-			</p>
 		</div>
 	);
 }
