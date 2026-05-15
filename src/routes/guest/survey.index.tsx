@@ -65,41 +65,37 @@ function StepIndicator({ current }: { current: number }) {
 				{[1, 2, 3].map((s, idx) => {
 					const isCompleted = s < current;
 					const isActive = s === current;
+					const bubbleClass = isCompleted
+						? "bg-[var(--navy)] text-[var(--amber)]"
+						: isActive
+							? "bg-[var(--amber)] text-[var(--navy)] ring-4 ring-amber-200"
+							: "bg-slate-100 text-slate-500 border border-slate-200";
+					const labelClass = isCompleted
+						? "text-[var(--navy)]"
+						: isActive
+							? "text-amber-700"
+							: "text-muted-foreground";
 					return (
 						<div key={s} className="flex flex-1 items-center">
 							<div className="flex flex-col items-center gap-1.5">
 								<div
-									className={`flex size-10 items-center justify-center rounded-full border-2 font-semibold text-sm transition-all duration-300 ${
-										isCompleted
-											? "border-indigo-500 bg-gradient-to-br from-indigo-500 to-violet-500 text-white shadow-md shadow-indigo-200"
-											: isActive
-												? "border-indigo-500 bg-gradient-to-br from-indigo-500 to-violet-500 text-white shadow-lg shadow-indigo-300"
-												: "border-muted-foreground/30 bg-background text-muted-foreground"
-									}`}
+									className={`flex size-10 items-center justify-center rounded-full text-sm font-bold transition-all duration-300 ${bubbleClass}`}
 								>
 									{isCompleted ? <Check className="size-4 stroke-[3]" /> : s}
 								</div>
 								<span
-									className={`text-xs font-medium whitespace-nowrap ${
-										isActive
-											? "text-indigo-600"
-											: isCompleted
-												? "text-indigo-400"
-												: "text-muted-foreground"
-									}`}
+									className={`whitespace-nowrap text-xs font-bold ${labelClass}`}
 								>
 									{STEP_LABELS[idx]}
 								</span>
 							</div>
-							{idx < 2 && (
+							{idx < 2 ? (
 								<div
-									className={`h-0.5 flex-1 mx-2 rounded-full transition-all duration-500 ${
-										s < current
-											? "bg-gradient-to-r from-indigo-500 to-violet-500"
-											: "bg-muted"
+									className={`mx-2 mb-5 h-0.5 flex-1 rounded-full transition-all duration-500 ${
+										s < current ? "bg-[var(--navy)]" : "bg-slate-200"
 									}`}
 								/>
-							)}
+							) : null}
 						</div>
 					);
 				})}
@@ -113,7 +109,6 @@ function SurveyPage() {
 	const [step, setStep] = useState(1);
 	const [error, setError] = useState("");
 
-	// Respondent info
 	const [status, setStatus] = useState("NON_ASN");
 	const [nama, setNama] = useState("");
 	const [nip, setNip] = useState("");
@@ -123,8 +118,6 @@ function SurveyPage() {
 	const [pekerjaan, setPekerjaan] = useState("LAINNYA");
 	const [layananId, setLayananId] = useState(0);
 	const [saran, setSaran] = useState("");
-
-	// Survey answers
 	const [surveyAnswers, setSurveyAnswers] = useState<Record<number, number>>(
 		{},
 	);
@@ -133,8 +126,6 @@ function SurveyPage() {
 		queryKey: ["forms-active"],
 		queryFn: () => getForms(),
 	});
-
-	// Use the first active form
 	const activeForm = formsList.find((f) => f.active === 1);
 	const formId = activeForm?.formId ?? 0;
 
@@ -211,36 +202,40 @@ function SurveyPage() {
 		totalQuestions > 0 ? (answeredCount / totalQuestions) * 100 : 0;
 
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
+		<div className="flex min-h-screen flex-col bg-background">
 			<PublicNavbar />
-			<div className="flex-1 container mx-auto max-w-2xl px-4 py-8">
+			<div className="container mx-auto max-w-2xl flex-1 px-4 py-8">
 				<StepIndicator current={step} />
 
 				{step === 1 && (
-					<Card className="glass-card border-t-4 border-t-indigo-500 shadow-lg shadow-indigo-100/50">
+					<Card className="overflow-hidden border-t-4 border-t-[var(--amber)] border-x border-b border-slate-200 shadow-sm">
 						<CardHeader className="pb-4">
 							<div className="flex items-center gap-3">
-								<div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 shadow-md shadow-indigo-200">
-									<User className="size-5 text-white" />
+								<div className="grid size-10 place-items-center rounded-lg bg-[var(--navy)] text-[var(--amber)]">
+									<User className="size-5" />
 								</div>
 								<div>
-									<CardTitle className="text-xl">Informasi Responden</CardTitle>
-									<p className="text-sm text-muted-foreground mt-0.5">
+									<CardTitle className="text-base font-extrabold text-[var(--navy)]">
+										Informasi Responden
+									</CardTitle>
+									<p className="mt-0.5 text-xs text-muted-foreground">
 										Lengkapi data diri Anda untuk melanjutkan
 									</p>
 								</div>
 							</div>
 						</CardHeader>
-						<CardContent className="space-y-5">
-							{/* Personal Info Group */}
-							<div className="rounded-xl border border-border/60 bg-muted/20 p-4 space-y-4">
-								<p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+						<CardContent className="space-y-4">
+							<div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
+								<p className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--blue)]">
+									<span className="h-0.5 w-3 bg-[var(--amber)]" />
 									Informasi Pribadi
 								</p>
 								<div className="space-y-2">
-									<Label>Status</Label>
+									<Label className="text-xs font-bold text-[var(--navy)]">
+										Status
+									</Label>
 									<Select value={status} onValueChange={setStatus}>
-										<SelectTrigger className="w-full min-h-[44px]">
+										<SelectTrigger className="min-h-[44px] w-full">
 											<SelectValue />
 										</SelectTrigger>
 										<SelectContent>
@@ -254,7 +249,9 @@ function SurveyPage() {
 								</div>
 								{status === "ASN" && (
 									<div className="space-y-2">
-										<Label>NIP</Label>
+										<Label className="text-xs font-bold text-[var(--navy)]">
+											NIP
+										</Label>
 										<Input
 											value={nip}
 											onChange={(e) => setNip(e.target.value)}
@@ -264,8 +261,8 @@ function SurveyPage() {
 									</div>
 								)}
 								<div className="space-y-2">
-									<Label>
-										Nama Lengkap <span className="text-destructive">*</span>
+									<Label className="text-xs font-bold text-[var(--navy)]">
+										Nama Lengkap <span className="text-[var(--red)]">*</span>
 									</Label>
 									<Input
 										value={nama}
@@ -275,11 +272,13 @@ function SurveyPage() {
 										required
 									/>
 								</div>
-								<div className="grid grid-cols-2 gap-4">
+								<div className="grid grid-cols-2 gap-3">
 									<div className="space-y-2">
-										<Label>Jenis Kelamin</Label>
+										<Label className="text-xs font-bold text-[var(--navy)]">
+											Jenis Kelamin
+										</Label>
 										<Select value={jk} onValueChange={setJk}>
-											<SelectTrigger className="w-full min-h-[44px]">
+											<SelectTrigger className="min-h-[44px] w-full">
 												<SelectValue />
 											</SelectTrigger>
 											<SelectContent>
@@ -292,7 +291,9 @@ function SurveyPage() {
 										</Select>
 									</div>
 									<div className="space-y-2">
-										<Label>Umur</Label>
+										<Label className="text-xs font-bold text-[var(--navy)]">
+											Umur
+										</Label>
 										<Input
 											type="number"
 											value={umur}
@@ -301,11 +302,13 @@ function SurveyPage() {
 										/>
 									</div>
 								</div>
-								<div className="grid grid-cols-2 gap-4">
+								<div className="grid grid-cols-2 gap-3">
 									<div className="space-y-2">
-										<Label>Pendidikan</Label>
+										<Label className="text-xs font-bold text-[var(--navy)]">
+											Pendidikan
+										</Label>
 										<Select value={pendidikan} onValueChange={setPendidikan}>
-											<SelectTrigger className="w-full min-h-[44px]">
+											<SelectTrigger className="min-h-[44px] w-full">
 												<SelectValue />
 											</SelectTrigger>
 											<SelectContent>
@@ -318,9 +321,11 @@ function SurveyPage() {
 										</Select>
 									</div>
 									<div className="space-y-2">
-										<Label>Pekerjaan</Label>
+										<Label className="text-xs font-bold text-[var(--navy)]">
+											Pekerjaan
+										</Label>
 										<Select value={pekerjaan} onValueChange={setPekerjaan}>
-											<SelectTrigger className="w-full min-h-[44px]">
+											<SelectTrigger className="min-h-[44px] w-full">
 												<SelectValue />
 											</SelectTrigger>
 											<SelectContent>
@@ -335,20 +340,20 @@ function SurveyPage() {
 								</div>
 							</div>
 
-							{/* Service Group */}
-							<div className="rounded-xl border border-border/60 bg-muted/20 p-4 space-y-4">
-								<p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+							<div className="space-y-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
+								<p className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--blue)]">
+									<span className="h-0.5 w-3 bg-[var(--amber)]" />
 									Layanan yang Dinilai
 								</p>
 								<div className="space-y-2">
-									<Label>
-										Layanan <span className="text-destructive">*</span>
+									<Label className="text-xs font-bold text-[var(--navy)]">
+										Layanan <span className="text-[var(--red)]">*</span>
 									</Label>
 									<Select
 										value={layananId ? String(layananId) : ""}
 										onValueChange={(v) => setLayananId(Number(v))}
 									>
-										<SelectTrigger className="w-full min-h-[44px]">
+										<SelectTrigger className="min-h-[44px] w-full">
 											<SelectValue placeholder="Pilih layanan..." />
 										</SelectTrigger>
 										<SelectContent>
@@ -366,180 +371,193 @@ function SurveyPage() {
 							</div>
 
 							{error && (
-								<div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3">
-									<p className="text-sm font-medium text-destructive">
+								<div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+									<p className="text-sm font-medium text-[var(--red)]">
 										{error}
 									</p>
 								</div>
 							)}
 							<Button
 								onClick={handleNextStep}
-								className="w-full min-h-[44px] bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-200 font-semibold"
+								className="min-h-[44px] w-full bg-[var(--navy)] font-bold text-white hover:bg-[var(--navy-2)]"
 							>
-								Lanjut ke Survey
+								Lanjut ke Survey →
 							</Button>
 						</CardContent>
 					</Card>
 				)}
 
 				{step === 2 && (
-					<div className="space-y-4">
-						<Card className="glass-card border-t-4 border-t-indigo-500 shadow-lg shadow-indigo-100/50">
-							<CardHeader className="pb-4">
-								<div className="flex items-center gap-3">
-									<div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 shadow-md shadow-indigo-200">
-										<ClipboardList className="size-5 text-white" />
-									</div>
-									<div className="flex-1">
-										<CardTitle className="text-xl">
-											{activeForm?.name ?? "Survey"}
-										</CardTitle>
-										<p className="text-sm text-muted-foreground mt-0.5">
-											{answeredCount} dari {totalQuestions} pertanyaan dijawab
-										</p>
-									</div>
+					<Card className="overflow-hidden border-t-4 border-t-[var(--amber)] border-x border-b border-slate-200 shadow-sm">
+						<CardHeader className="pb-4">
+							<div className="flex items-center gap-3">
+								<div className="grid size-10 place-items-center rounded-lg bg-[var(--navy)] text-[var(--amber)]">
+									<ClipboardList className="size-5" />
 								</div>
-								{/* Progress bar */}
-								<div className="mt-3 space-y-1">
-									<div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-										<div
-											className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all duration-500"
-											style={{ width: `${progressPct}%` }}
-										/>
-									</div>
-									<p className="text-xs text-right text-muted-foreground">
-										{Math.round(progressPct)}% selesai
+								<div className="flex-1">
+									<CardTitle className="text-base font-extrabold text-[var(--navy)]">
+										{activeForm?.name ?? "Survey"}
+									</CardTitle>
+									<p className="mt-0.5 text-xs text-muted-foreground">
+										{answeredCount} dari {totalQuestions} pertanyaan dijawab
 									</p>
 								</div>
-							</CardHeader>
-							<CardContent className="space-y-6">
-								{activeQuestions.map((q, idx) => (
+							</div>
+							<div className="mt-3 space-y-1">
+								<div className="flex justify-between text-[10px] font-bold text-muted-foreground">
+									<span>Progress</span>
+									<span className="text-[var(--navy)]">
+										{Math.round(progressPct)}% selesai
+									</span>
+								</div>
+								<div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
 									<div
-										key={q.formQuestionId}
-										className="rounded-xl border border-border/60 bg-muted/10 p-4 space-y-3"
-									>
-										<div className="flex gap-3">
-											<span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 text-xs font-bold text-indigo-700">
-												{idx + 1}
-											</span>
-											<p className="font-medium text-sm leading-relaxed pt-0.5">
-												{q.text}
-											</p>
-										</div>
-										<RadioGroup
-											value={
-												surveyAnswers[q.formQuestionId] != null
-													? String(surveyAnswers[q.formQuestionId])
-													: undefined
-											}
-											onValueChange={(val) =>
-												setSurveyAnswers((prev) => ({
-													...prev,
-													[q.formQuestionId]: Number(val),
-												}))
-											}
-											className="grid grid-cols-2 gap-2"
-										>
-											{[1, 2, 3, 4].map((val) => {
-												const isSelected =
-													surveyAnswers[q.formQuestionId] === val;
-												return (
-													<Label
-														key={val}
-														className={`flex min-h-[52px] cursor-pointer items-center gap-3 rounded-xl border-2 p-3 font-normal transition-all duration-200 ${
-															isSelected
-																? "border-indigo-500 bg-gradient-to-br from-indigo-50 to-violet-50 shadow-sm shadow-indigo-100"
-																: "border-border hover:border-indigo-300 hover:bg-muted/50"
-														}`}
-													>
-														<RadioGroupItem
-															value={String(val)}
-															className={
-																isSelected
-																	? "border-indigo-500 text-indigo-600"
-																	: ""
-															}
-														/>
-														<span
-															className={`text-sm font-medium ${isSelected ? "text-indigo-700" : ""}`}
-														>
-															{val} — {ANSWER_POIN[val]}
-														</span>
-													</Label>
-												);
-											})}
-										</RadioGroup>
-									</div>
-								))}
-
-								<div className="rounded-xl border border-border/60 bg-muted/10 p-4 space-y-2">
-									<Label htmlFor="saran-textarea" className="font-medium">
-										Saran &amp; Masukan{" "}
-										<span className="text-muted-foreground font-normal">
-											(opsional)
-										</span>
-									</Label>
-									<Textarea
-										value={saran}
-										onChange={(e) => setSaran(e.target.value)}
-										placeholder="Tuliskan saran atau masukan Anda..."
-										className="min-h-[100px] resize-none"
+										className="h-full rounded-full bg-gradient-to-r from-[var(--navy)] to-[var(--blue)] transition-all duration-500"
+										style={{ width: `${progressPct}%` }}
 									/>
 								</div>
-
-								{error && (
-									<div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3">
-										<p className="text-sm font-medium text-destructive">
-											{error}
+							</div>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							{activeQuestions.map((q, idx) => (
+								<div
+									key={q.formQuestionId}
+									className="space-y-3 rounded-lg border border-slate-200 bg-white p-4"
+								>
+									<div className="flex gap-3">
+										<span className="grid size-6 shrink-0 place-items-center rounded-md bg-[var(--amber-soft)] text-xs font-black text-amber-800">
+											{idx + 1}
+										</span>
+										<p className="pt-0.5 text-sm font-semibold leading-relaxed text-[var(--navy)]">
+											{q.text}
 										</p>
 									</div>
-								)}
-
-								<div className="flex gap-3">
-									<Button
-										variant="outline"
-										onClick={() => setStep(1)}
-										className="min-h-[44px] px-6"
+									<RadioGroup
+										value={
+											surveyAnswers[q.formQuestionId] != null
+												? String(surveyAnswers[q.formQuestionId])
+												: undefined
+										}
+										onValueChange={(val) =>
+											setSurveyAnswers((prev) => ({
+												...prev,
+												[q.formQuestionId]: Number(val),
+											}))
+										}
+										className="grid grid-cols-2 gap-2"
 									>
-										Kembali
-									</Button>
-									<Button
-										onClick={handleSubmit}
-										className="flex-1 min-h-[44px] bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-200 font-semibold disabled:opacity-60"
-										disabled={submitMut.isPending}
-									>
-										{submitMut.isPending ? "Menyimpan..." : "Kirim Survey"}
-									</Button>
+										{[1, 2, 3, 4].map((val) => {
+											const isSelected =
+												surveyAnswers[q.formQuestionId] === val;
+											return (
+												<Label
+													key={val}
+													className={`flex min-h-[52px] cursor-pointer items-center gap-3 rounded-lg border-2 p-3 font-normal transition-all duration-200 ${
+														isSelected
+															? "border-[var(--amber)] bg-[var(--amber-soft)] font-bold text-amber-900"
+															: "border-slate-200 hover:border-amber-300 hover:bg-slate-50"
+													}`}
+												>
+													<RadioGroupItem
+														value={String(val)}
+														className={
+															isSelected
+																? "border-[var(--amber)] text-[var(--amber)]"
+																: ""
+														}
+													/>
+													<span className="text-sm font-medium">
+														{val} — {ANSWER_POIN[val]}
+													</span>
+												</Label>
+											);
+										})}
+									</RadioGroup>
 								</div>
-							</CardContent>
-						</Card>
-					</div>
+							))}
+
+							<div className="space-y-2 rounded-lg border border-slate-200 bg-slate-50 p-4">
+								<Label
+									htmlFor="saran-textarea"
+									className="flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--blue)]"
+								>
+									<span className="h-0.5 w-3 bg-[var(--amber)]" />
+									Saran &amp; Masukan{" "}
+									<span className="ml-1 font-medium normal-case tracking-normal text-muted-foreground">
+										(opsional)
+									</span>
+								</Label>
+								<Textarea
+									id="saran-textarea"
+									value={saran}
+									onChange={(e) => setSaran(e.target.value)}
+									placeholder="Tuliskan saran atau masukan Anda..."
+									className="min-h-[100px] resize-none"
+								/>
+							</div>
+
+							{error && (
+								<div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+									<p className="text-sm font-medium text-[var(--red)]">
+										{error}
+									</p>
+								</div>
+							)}
+
+							<div className="flex gap-3">
+								<Button
+									variant="outline"
+									onClick={() => setStep(1)}
+									className="min-h-[44px] border-slate-200 px-5 font-bold text-[var(--navy)]"
+								>
+									← Kembali
+								</Button>
+								<Button
+									onClick={handleSubmit}
+									className="min-h-[44px] flex-1 bg-[var(--navy)] font-bold text-white hover:bg-[var(--navy-2)] disabled:opacity-60"
+									disabled={submitMut.isPending}
+								>
+									{submitMut.isPending ? "Menyimpan..." : "Kirim Survey →"}
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
 				)}
 
 				{step === 3 && (
-					<Card className="glass-card border-t-4 border-t-emerald-500 shadow-lg shadow-emerald-100/50 overflow-hidden">
-						<div className="bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 px-8 pt-12 pb-8 text-center">
-							<div className="mx-auto flex size-24 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-400 shadow-xl shadow-emerald-200">
-								<CheckCircle2 className="size-12 text-white" strokeWidth={2} />
+					<Card className="overflow-hidden border-t-4 border-t-emerald-500 border-x border-b border-slate-200 shadow-sm">
+						<div className="bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 px-8 pt-12 pb-6 text-center">
+							<div className="mx-auto grid size-20 place-items-center rounded-full bg-emerald-500 shadow-xl shadow-emerald-200">
+								<CheckCircle2 className="size-10 text-white" strokeWidth={2} />
 							</div>
-							<h2 className="mt-6 text-3xl font-bold gradient-text">
+							<h2 className="mt-5 text-2xl font-black text-[var(--navy)]">
 								Terima Kasih!
 							</h2>
-							<p className="mt-2 text-base text-muted-foreground">
-								Terima kasih atas partisipasi Anda
+							<p className="mt-1 text-sm text-muted-foreground">
+								Survey Anda berhasil terekam dalam sistem IKM
 							</p>
 						</div>
-						<CardContent className="py-8 text-center space-y-4">
-							<p className="text-muted-foreground max-w-sm mx-auto">
-								Survey Anda telah berhasil disimpan. Masukan Anda sangat berarti
-								untuk meningkatkan kualitas pelayanan kami.
+						<CardContent className="space-y-4 py-7 text-center">
+							<p className="mx-auto max-w-sm text-sm leading-relaxed text-slate-700">
+								Masukan Anda sangat berarti untuk meningkatkan kualitas
+								pelayanan Diskominfo Kabupaten Tabalong. Hasil agregat akan
+								tampil di halaman Hasil IKM.
 							</p>
-							<Button
-								onClick={() => navigate({ to: "/" })}
-								className="min-h-[44px] px-8 bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-200 font-semibold"
-							>
-								Kembali ke Beranda
-							</Button>
+							<div className="flex flex-wrap justify-center gap-3">
+								<Button
+									variant="outline"
+									onClick={() => navigate({ to: "/guest/ikm" })}
+									className="min-h-[44px] border-slate-200 px-5 font-bold text-[var(--navy)]"
+								>
+									Lihat Hasil IKM
+								</Button>
+								<Button
+									onClick={() => navigate({ to: "/" })}
+									className="min-h-[44px] bg-[var(--navy)] px-6 font-bold text-white hover:bg-[var(--navy-2)]"
+								>
+									Kembali ke Beranda
+								</Button>
+							</div>
 						</CardContent>
 					</Card>
 				)}

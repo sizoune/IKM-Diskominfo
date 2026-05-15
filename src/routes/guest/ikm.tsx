@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { BarChart2, ClipboardCheck, Star, Users } from "lucide-react";
+import { BarChart2, ClipboardCheck, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PublicFooter } from "@/components/public-footer";
 import { PublicNavbar } from "@/components/public-navbar";
@@ -21,7 +21,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { getMutu } from "@/lib/ikm";
+import { getMutu, getMutuBadgeClasses, getMutuFillHex } from "@/lib/ikm";
 import { getAvailableYears, getIkmData } from "@/server/ikm";
 
 export const Route = createFileRoute("/guest/ikm")({
@@ -48,45 +48,6 @@ export const Route = createFileRoute("/guest/ikm")({
 	component: IkmPage,
 });
 
-function getBadgeColor(color: string) {
-	switch (color) {
-		case "green":
-			return "bg-emerald-100 text-emerald-800 border-emerald-300";
-		case "blue":
-			return "bg-indigo-100 text-indigo-800 border-indigo-300";
-		case "yellow":
-			return "bg-amber-100 text-amber-800 border-amber-300";
-		default:
-			return "bg-red-100 text-red-800 border-red-300";
-	}
-}
-
-function getBarColor(color: string) {
-	switch (color) {
-		case "green":
-			return "#10B981";
-		case "blue":
-			return "#6366F1";
-		case "yellow":
-			return "#F59E0B";
-		default:
-			return "#EF4444";
-	}
-}
-
-function getOverallBgColor(color: string) {
-	switch (color) {
-		case "green":
-			return "from-emerald-500 to-teal-500";
-		case "blue":
-			return "from-indigo-500 to-violet-500";
-		case "yellow":
-			return "from-amber-500 to-orange-400";
-		default:
-			return "from-red-500 to-rose-500";
-	}
-}
-
 function IkmPage() {
 	const currentYear = new Date().getFullYear();
 	const [year, setYear] = useState(currentYear);
@@ -96,19 +57,17 @@ function IkmPage() {
 		queryFn: () => getAvailableYears(),
 	});
 
-const { data: ikmData = [] } = useQuery({
-queryKey: ["ikm-data", year],
-queryFn: () => getIkmData({ data: year }),
+	const { data: ikmData = [] } = useQuery({
+		queryKey: ["ikm-data", year],
+		queryFn: () => getIkmData({ data: year }),
 	});
 
-	// Fix year bug: set to latest available year when data loads
 	useEffect(() => {
 		if (years.length > 0 && !years.includes(year)) {
 			setYear(Math.max(...years));
 		}
 	}, [years, year]);
 
-	// Calculate overall IKM
 	const totalAvg =
 		ikmData.length > 0
 			? ikmData.reduce((sum, d) => sum + d.avgValue, 0) / ikmData.length
@@ -120,33 +79,39 @@ queryFn: () => getIkmData({ data: year }),
 		ikmData.length > 0 ? Math.max(...ikmData.map((d) => d.totalResponden)) : 0;
 
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
+		<div className="flex min-h-screen flex-col bg-background">
 			<PublicNavbar />
-			<div className="flex-1 container mx-auto max-w-4xl px-4 py-10 space-y-8">
+			<div className="container mx-auto max-w-4xl flex-1 space-y-6 px-4 py-10">
 				{/* Header */}
-				<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-					<div className="space-y-1">
-						<h1 className="text-4xl font-extrabold tracking-tight gradient-text">Hasil IKM</h1>
-						<p className="text-muted-foreground text-base">
-							Indeks Kepuasan Masyarakat — Tahun {year}
+				<div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+					<div>
+						<div className="mb-2 inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[var(--blue)]">
+							<span className="h-0.5 w-6 bg-[var(--amber)]" />
+							Data Terbuka · Live
+						</div>
+						<h1 className="text-3xl font-black tracking-tight text-[var(--navy)] md:text-4xl">
+							Hasil <span className="text-[var(--blue)]">IKM {year}</span>
+						</h1>
+						<p className="mt-1 text-sm text-muted-foreground">
+							Indeks Kepuasan Masyarakat — Diskominfo Kabupaten Tabalong
 						</p>
 					</div>
 					<Select
 						value={String(year)}
 						onValueChange={(v) => setYear(Number(v))}
 					>
-						<SelectTrigger className="w-40 min-h-[44px] font-medium rounded-xl bg-white/50 backdrop-blur-sm border-indigo-100 hover:border-indigo-300 transition-all duration-300 shadow-sm">
+						<SelectTrigger className="min-h-[44px] w-40 rounded-lg border-slate-200 bg-white font-bold text-[var(--navy)]">
 							<SelectValue />
 						</SelectTrigger>
-						<SelectContent className="rounded-xl">
+						<SelectContent className="rounded-lg">
 							{years.length > 0 ? (
 								years.map((y) => (
-									<SelectItem key={y} value={String(y)} className="rounded-lg">
+									<SelectItem key={y} value={String(y)}>
 										{y}
 									</SelectItem>
 								))
 							) : (
-								<SelectItem value={String(currentYear)} className="rounded-lg">
+								<SelectItem value={String(currentYear)}>
 									{currentYear}
 								</SelectItem>
 							)}
@@ -154,86 +119,105 @@ queryFn: () => getIkmData({ data: year }),
 					</Select>
 				</div>
 
-				{/* Summary Card */}
+				{/* Overall Card */}
 				{ikmData.length > 0 && (
-					<Card className="glass-card overflow-hidden border-0 shadow-xl rounded-2xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+					<Card className="relative overflow-hidden rounded-2xl border-0 bg-gradient-to-br from-[var(--navy)] to-[var(--navy-2)] text-white shadow-xl">
 						<div
-							className={`bg-gradient-to-br ${getOverallBgColor(overall.color)} p-8 sm:p-10 text-white relative overflow-hidden`}
-						>
-							{/* Decorative background elements */}
-							<div className="absolute top-0 right-0 -mt-16 -mr-16 size-64 bg-white/10 rounded-full blur-3xl"></div>
-							<div className="absolute bottom-0 left-0 -mb-16 -ml-16 size-48 bg-black/10 rounded-full blur-2xl"></div>
-							
-							<div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 relative z-10">
-								<div className="flex size-20 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md shadow-inner border border-white/20">
-									<Star className="size-10 text-white fill-white drop-shadow-md" />
+							className="pointer-events-none absolute -top-12 -right-12 size-[220px] rounded-full"
+							style={{
+								background:
+									"radial-gradient(circle, rgba(245,158,11,0.18), transparent 70%)",
+							}}
+							aria-hidden
+						/>
+						<div
+							className="pointer-events-none absolute -bottom-10 -left-10 size-[180px] rounded-full"
+							style={{
+								background:
+									"radial-gradient(circle, rgba(96,165,250,0.15), transparent 70%)",
+							}}
+							aria-hidden
+						/>
+						<CardContent className="relative grid items-center gap-6 p-8 sm:grid-cols-[auto_1fr_auto] sm:p-10">
+							<div
+								className="grid size-24 place-items-center rounded-2xl text-5xl font-black shadow-2xl shadow-amber-500/30 sm:size-28 sm:text-6xl"
+								style={{
+									background: getMutuFillHex(overall.color),
+									color: "#0a1f44",
+								}}
+							>
+								{overall.grade}
+							</div>
+							<div>
+								<div className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--sky)]">
+									Penilaian Keseluruhan
 								</div>
-								<div className="text-center sm:text-left space-y-2">
-									<p className="text-white/90 text-sm font-semibold uppercase tracking-widest">
-										Penilaian Keseluruhan
-									</p>
-									<div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mt-2 justify-center sm:justify-start">
-										<span className="text-7xl font-black tracking-tighter drop-shadow-lg">{overall.grade}</span>
-										<div className="space-y-1">
-											<p className="text-2xl font-bold tracking-tight">{overall.label}</p>
-											<div className="inline-flex items-center px-3 py-1 rounded-full bg-black/20 backdrop-blur-sm border border-white/10">
-												<p className="text-white/90 text-sm font-medium">
-													IKM Score: <span className="font-mono font-bold ml-1">{ikmScore.toFixed(2)}</span>
-												</p>
-											</div>
-										</div>
-									</div>
+								<div className="mt-1 text-2xl font-black sm:text-3xl">
+									{overall.label}
+								</div>
+								<span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-3 py-1 text-[11px] font-bold text-[var(--amber)]">
+									★ Mutu {overall.grade}
+								</span>
+							</div>
+							<div className="text-left sm:text-right">
+								<div className="text-3xl font-black text-[var(--amber)] sm:text-4xl">
+									{ikmScore.toFixed(2)}
+								</div>
+								<div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-[var(--sky)]">
+									IKM Score
 								</div>
 							</div>
-						</div>
+						</CardContent>
 					</Card>
 				)}
 
 				{/* Stat Cards */}
-				<div className="grid gap-6 md:grid-cols-3">
-					<Card className="glass-card border-0 shadow-lg overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
-						<CardContent className="p-6">
-							<div className="flex items-center gap-5">
-								<div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300 shadow-sm">
-									<BarChart2 className="size-7" />
+				<div className="grid gap-4 md:grid-cols-3">
+					<Card className="relative overflow-hidden rounded-xl border-slate-200">
+						<div className="absolute inset-y-0 left-0 w-[3px] bg-[var(--navy)]" />
+						<CardContent className="p-5">
+							<div className="flex items-center gap-3">
+								<div className="grid size-11 place-items-center rounded-lg bg-slate-100 text-[var(--navy)]">
+									<BarChart2 className="size-5" />
 								</div>
-								<div className="space-y-1">
-									<p className="text-sm text-muted-foreground font-medium tracking-wide">
+								<div>
+									<div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 										Nilai IKM
-									</p>
-									<p className="text-4xl font-extrabold text-indigo-950 tracking-tight">
+									</div>
+									<div className="text-2xl font-black text-[var(--navy)]">
 										{ikmScore.toFixed(2)}
-									</p>
+									</div>
 								</div>
 							</div>
-							<div className="mt-5 h-2 rounded-full bg-indigo-50 overflow-hidden">
+							<div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-100">
 								<div
-									className="h-full rounded-full bg-indigo-500 transition-all duration-1000 ease-out"
-									style={{ width: `${Math.min((ikmScore / 100) * 100, 100)}%` }}
+									className="h-full rounded-full bg-[var(--navy)] transition-all duration-1000"
+									style={{ width: `${Math.min(ikmScore, 100)}%` }}
 								/>
 							</div>
 						</CardContent>
 					</Card>
 
-					<Card className="glass-card border-0 shadow-lg overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
-						<CardContent className="p-6">
-							<div className="flex items-center gap-5">
-								<div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-violet-50 text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-colors duration-300 shadow-sm">
-									<ClipboardCheck className="size-7" />
+					<Card className="relative overflow-hidden rounded-xl border-slate-200">
+						<div className="absolute inset-y-0 left-0 w-[3px] bg-[var(--amber)]" />
+						<CardContent className="p-5">
+							<div className="flex items-center gap-3">
+								<div className="grid size-11 place-items-center rounded-lg bg-[var(--amber-soft)] text-amber-800">
+									<ClipboardCheck className="size-5" />
 								</div>
-								<div className="space-y-1">
-									<p className="text-sm text-muted-foreground font-medium tracking-wide">
+								<div>
+									<div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 										Mutu Pelayanan
-									</p>
-									<p className="text-4xl font-extrabold text-violet-950 tracking-tight">
+									</div>
+									<div className="text-2xl font-black text-[var(--navy)]">
 										{overall.grade}
-									</p>
+									</div>
 								</div>
 							</div>
-							<div className="mt-5">
+							<div className="mt-3">
 								<Badge
 									variant="outline"
-									className={`${getBadgeColor(overall.color)} font-bold px-4 py-1.5 rounded-full text-sm shadow-sm`}
+									className={`${getMutuBadgeClasses(overall.color)} rounded-full px-3 py-1 text-xs font-bold`}
 								>
 									{overall.label}
 								</Badge>
@@ -241,59 +225,63 @@ queryFn: () => getIkmData({ data: year }),
 						</CardContent>
 					</Card>
 
-					<Card className="glass-card border-0 shadow-lg overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
-						<CardContent className="p-6">
-							<div className="flex items-center gap-5">
-								<div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 shadow-sm">
-									<Users className="size-7" />
+					<Card className="relative overflow-hidden rounded-xl border-slate-200">
+						<div className="absolute inset-y-0 left-0 w-[3px] bg-[var(--red)]" />
+						<CardContent className="p-5">
+							<div className="flex items-center gap-3">
+								<div className="grid size-11 place-items-center rounded-lg bg-red-100 text-[var(--red)]">
+									<Users className="size-5" />
 								</div>
-								<div className="space-y-1">
-									<p className="text-sm text-muted-foreground font-medium tracking-wide">
+								<div>
+									<div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 										Total Responden
-									</p>
-									<p className="text-4xl font-extrabold text-emerald-950 tracking-tight">
+									</div>
+									<div className="text-2xl font-black text-[var(--navy)]">
 										{totalResponden}
-									</p>
+									</div>
 								</div>
 							</div>
-							<div className="mt-5">
-								<div className="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-medium">
+							<div className="mt-3">
+								<span className="inline-block rounded bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-700">
 									{ikmData.length} unsur pelayanan dinilai
-								</div>
+								</span>
 							</div>
 						</CardContent>
 					</Card>
 				</div>
 
-				{/* Data Table */}
-				<Card className="glass-card border-0 shadow-lg overflow-hidden rounded-2xl">
-					<CardHeader className="bg-gradient-to-r from-indigo-600 to-violet-600 p-6">
-						<CardTitle className="text-white text-xl font-bold tracking-wide">
+				{/* Detail Table */}
+				<Card className="overflow-hidden rounded-xl border-slate-200">
+					<CardHeader className="flex flex-row items-center justify-between bg-[var(--navy)] p-5 text-white">
+						<CardTitle className="text-sm font-extrabold tracking-wide">
 							Detail Per Unsur — Tahun {year}
 						</CardTitle>
+						<span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-[var(--amber)]">
+							{ikmData.length} ASPEK
+						</span>
 					</CardHeader>
 					<CardContent className="p-0">
 						{ikmData.length > 0 ? (
 							<div className="overflow-x-auto">
 								<Table>
 									<TableHeader>
-										<TableRow className="bg-indigo-50/80 hover:bg-indigo-50/80 border-b border-indigo-100">
-											<TableHead className="text-indigo-950 font-bold py-4">
+										<TableRow className="border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
+											<TableHead className="py-3 text-[10px] font-extrabold uppercase tracking-wider text-[var(--navy)]">
 												Kode
 											</TableHead>
-											<TableHead className="text-indigo-950 font-bold py-4">
+											<TableHead className="py-3 text-[10px] font-extrabold uppercase tracking-wider text-[var(--navy)]">
 												Unsur Pelayanan
 											</TableHead>
-											<TableHead className="text-right text-indigo-950 font-bold py-4">
+											<TableHead className="py-3 text-right text-[10px] font-extrabold uppercase tracking-wider text-[var(--navy)]">
 												Rata-rata
 											</TableHead>
-											<TableHead className="text-right text-indigo-950 font-bold py-4">
-												NRR x 25/4
+											<TableHead className="py-3 text-right text-[10px] font-extrabold uppercase tracking-wider text-[var(--navy)]">
+												NRR × 25/4
 											</TableHead>
-											<TableHead className="text-indigo-950 font-bold py-4">
+											<TableHead className="py-3 text-[10px] font-extrabold uppercase tracking-wider text-[var(--navy)]">
 												Mutu
 											</TableHead>
-											<TableHead className="text-right text-indigo-950 font-bold py-4">
+											<TableHead className="py-3 text-right text-[10px] font-extrabold uppercase tracking-wider text-[var(--navy)]">
 												Responden
 											</TableHead>
 										</TableRow>
@@ -305,31 +293,33 @@ queryFn: () => getIkmData({ data: year }),
 											return (
 												<TableRow
 													key={d.formQuestionId}
-													className={`transition-colors hover:bg-indigo-50/60 ${
+													className={
 														idx % 2 === 1 ? "bg-slate-50/50" : "bg-white"
-													}`}
+													}
 												>
-													<TableCell className="font-mono text-sm font-bold text-indigo-600 py-4">
-														{d.kode}
+													<TableCell className="py-3">
+														<span className="inline-block rounded bg-blue-100 px-2 py-0.5 font-mono text-[11px] font-extrabold text-[var(--blue)]">
+															{d.kode}
+														</span>
 													</TableCell>
-													<TableCell className="font-medium text-slate-700 py-4">
+													<TableCell className="py-3 text-sm font-medium text-slate-700">
 														{d.text}
 													</TableCell>
-													<TableCell className="text-right font-mono font-medium text-slate-600 py-4">
+													<TableCell className="py-3 text-right font-mono text-sm font-bold text-[var(--navy)]">
 														{d.avgValue.toFixed(2)}
 													</TableCell>
-													<TableCell className="text-right font-mono font-medium text-slate-600 py-4">
+													<TableCell className="py-3 text-right font-mono text-sm font-bold text-[var(--navy)]">
 														{ikm.toFixed(2)}
 													</TableCell>
-													<TableCell className="py-4">
+													<TableCell className="py-3">
 														<Badge
 															variant="outline"
-															className={`${getBadgeColor(mutu.color)} font-bold rounded-full px-3`}
+															className={`${getMutuBadgeClasses(mutu.color)} rounded-full px-2 py-0.5 text-[10px] font-bold`}
 														>
 															{mutu.grade} — {mutu.label}
 														</Badge>
 													</TableCell>
-													<TableCell className="text-right font-medium text-slate-600 py-4">
+													<TableCell className="py-3 text-right text-sm font-medium text-slate-600">
 														{d.totalResponden}
 													</TableCell>
 												</TableRow>
@@ -339,16 +329,17 @@ queryFn: () => getIkmData({ data: year }),
 								</Table>
 							</div>
 						) : (
-							<div className="py-24 text-center space-y-5">
-								<div className="mx-auto flex size-24 items-center justify-center rounded-full bg-slate-100 shadow-inner">
-									<BarChart2 className="size-12 text-slate-400" />
+							<div className="space-y-4 py-20 text-center">
+								<div className="mx-auto grid size-20 place-items-center rounded-full bg-slate-100">
+									<BarChart2 className="size-10 text-slate-400" />
 								</div>
-								<div className="space-y-2">
-									<p className="text-xl font-bold text-slate-700">
+								<div>
+									<p className="text-lg font-extrabold text-[var(--navy)]">
 										Belum Ada Data
 									</p>
-									<p className="text-base text-slate-500 max-w-sm mx-auto">
-										Belum ada data survey Indeks Kepuasan Masyarakat untuk tahun {year}.
+									<p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
+										Belum ada data survey Indeks Kepuasan Masyarakat untuk tahun{" "}
+										{year}.
 									</p>
 								</div>
 							</div>
@@ -358,38 +349,40 @@ queryFn: () => getIkmData({ data: year }),
 
 				{/* Bar Chart */}
 				{ikmData.length > 0 && (
-					<Card className="glass-card border-0 shadow-lg rounded-2xl overflow-hidden">
-						<CardHeader className="border-b border-slate-100 bg-white/50 p-6">
-							<CardTitle className="text-xl font-bold text-slate-800 tracking-wide">Grafik Nilai Per Unsur</CardTitle>
+					<Card className="overflow-hidden rounded-xl border-slate-200">
+						<CardHeader className="border-b border-slate-100 p-5">
+							<CardTitle className="text-sm font-extrabold tracking-wide text-[var(--navy)]">
+								Grafik Nilai Per Unsur
+							</CardTitle>
 						</CardHeader>
-						<CardContent className="p-6 sm:p-8">
-							<div className="space-y-6">
+						<CardContent className="p-5 sm:p-6">
+							<div className="space-y-4">
 								{ikmData.map((d, idx) => {
 									const mutu = getMutu(d.avgValue);
 									const pct = (d.avgValue / 4) * 100;
-									const barColor = getBarColor(mutu.color);
+									const barColor = getMutuFillHex(mutu.color);
 									return (
-										<div key={d.formQuestionId} className="space-y-2 group">
-											<div className="flex justify-between items-end gap-4 text-sm">
-												<span className="font-medium text-slate-700 truncate flex-1 group-hover:text-indigo-700 transition-colors">
-													<span className="text-indigo-600 font-mono font-bold mr-2 bg-indigo-50 px-2 py-0.5 rounded">
+										<div key={d.formQuestionId} className="space-y-1.5">
+											<div className="flex items-end justify-between gap-3 text-sm">
+												<span className="flex-1 truncate font-medium text-slate-700">
+													<span className="mr-2 inline-block rounded bg-blue-100 px-1.5 py-0.5 font-mono text-[10px] font-extrabold text-[var(--blue)]">
 														{d.kode}
 													</span>
 													{d.text}
 												</span>
-												<div className="flex items-center gap-3 shrink-0">
-													<span className="font-mono font-bold text-base text-slate-700">
+												<div className="flex shrink-0 items-center gap-2">
+													<span className="font-mono text-sm font-bold text-[var(--navy)]">
 														{d.avgValue.toFixed(2)}
 													</span>
 													<span
-														className="text-xs font-bold px-2 py-1 rounded-md text-white shadow-sm"
+														className="rounded px-1.5 py-0.5 text-[10px] font-bold text-white"
 														style={{ backgroundColor: barColor }}
 													>
 														{pct.toFixed(0)}%
 													</span>
 												</div>
 											</div>
-											<div className="h-4 w-full rounded-full bg-slate-100 overflow-hidden shadow-inner">
+											<div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
 												<div
 													className="h-full rounded-full transition-all duration-1000 ease-out"
 													style={{
