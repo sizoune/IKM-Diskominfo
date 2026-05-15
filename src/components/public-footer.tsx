@@ -8,9 +8,12 @@ export function PublicFooter() {
 					{/* Brand column */}
 					<div className="flex flex-col gap-3">
 						<div className="flex items-center gap-3">
-							{/* TODO: Replace with Diskominfo logo SVG when available */}
-							<div className="grid size-10 place-items-center rounded-md bg-[var(--amber)] text-lg font-black text-[var(--navy)]">
-								T
+							<div className="grid size-10 place-items-center rounded-md bg-white p-1.5">
+								<img
+									src="/komdigi.png"
+									alt="Logo Diskominfo Tabalong"
+									className="size-full object-contain"
+								/>
 							</div>
 							<div className="leading-tight">
 								<p className="text-sm font-extrabold tracking-wide">

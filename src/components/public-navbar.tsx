@@ -23,9 +23,11 @@ export function PublicNavbar() {
 			<header className="sticky top-0 z-50 border-b border-slate-100 bg-white/92 backdrop-blur-md">
 				<div className="container mx-auto flex h-16 items-center justify-between px-4">
 					<Link to="/" className="flex items-center gap-3">
-						<div className="grid size-8 place-items-center rounded-md bg-[var(--navy)] text-base font-black text-white">
-							{/* TODO: Replace with Diskominfo logo SVG when available */}T
-						</div>
+						<img
+							src="/komdigi.png"
+							alt="Logo Diskominfo Tabalong"
+							className="size-8 object-contain"
+						/>
 						<div className="leading-tight">
 							<div className="text-[11px] font-extrabold tracking-wide text-[var(--navy)]">
 								DISKOMINFO TABALONG
@@ -86,10 +88,11 @@ export function PublicNavbar() {
 						>
 							<SheetHeader>
 								<SheetTitle className="flex items-center gap-2.5">
-									<div className="grid size-7 place-items-center rounded-md bg-[var(--navy)] text-xs font-black text-white">
-										{/* TODO: Replace with Diskominfo logo SVG when available */}
-										T
-									</div>
+									<img
+										src="/komdigi.png"
+										alt="Logo Diskominfo Tabalong"
+										className="size-7 object-contain"
+									/>
 									<span className="font-extrabold text-[var(--navy)]">
 										IKM Diskominfo
 									</span>
