@@ -11,6 +11,9 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 
+const ACTIVE_LINK_CLASS =
+	"relative flex min-h-[44px] items-center text-sm font-bold text-[var(--navy)] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-0.5 after:bg-[var(--amber)]";
+
 export function PublicNavbar() {
 	const [open, setOpen] = useState(false);
 
@@ -21,7 +24,7 @@ export function PublicNavbar() {
 				<div className="container mx-auto flex h-16 items-center justify-between px-4">
 					<Link to="/" className="flex items-center gap-3">
 						<div className="grid size-8 place-items-center rounded-md bg-[var(--navy)] text-base font-black text-white">
-							T
+							{/* TODO: Replace with Diskominfo logo SVG when available */}T
 						</div>
 						<div className="leading-tight">
 							<div className="text-[11px] font-extrabold tracking-wide text-[var(--navy)]">
@@ -39,8 +42,7 @@ export function PublicNavbar() {
 							to="/guest/survey"
 							className="relative flex min-h-[44px] items-center text-sm font-medium text-slate-700 transition-colors hover:text-[var(--navy)]"
 							activeProps={{
-								className:
-									"relative flex min-h-[44px] items-center text-sm font-bold text-[var(--navy)] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-0.5 after:bg-[var(--amber)]",
+								className: ACTIVE_LINK_CLASS,
 							}}
 						>
 							Survey
@@ -49,8 +51,7 @@ export function PublicNavbar() {
 							to="/guest/ikm"
 							className="relative flex min-h-[44px] items-center text-sm font-medium text-slate-700 transition-colors hover:text-[var(--navy)]"
 							activeProps={{
-								className:
-									"relative flex min-h-[44px] items-center text-sm font-bold text-[var(--navy)] after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-0.5 after:bg-[var(--amber)]",
+								className: ACTIVE_LINK_CLASS,
 							}}
 						>
 							Hasil IKM
@@ -86,6 +87,7 @@ export function PublicNavbar() {
 							<SheetHeader>
 								<SheetTitle className="flex items-center gap-2.5">
 									<div className="grid size-7 place-items-center rounded-md bg-[var(--navy)] text-xs font-black text-white">
+										{/* TODO: Replace with Diskominfo logo SVG when available */}
 										T
 									</div>
 									<span className="font-extrabold text-[var(--navy)]">
